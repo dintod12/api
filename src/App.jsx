@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-// Daftar 13 Modul lengkap
 const MODULES = [
   {
     id: 'M01',
@@ -76,18 +75,18 @@ const MODULES = [
     path: '/docs/download',
     endpoints: [
       {
-        name: 'CapCut Video',
-        path: '/api/download/capcut',
-        method: 'GET',
-        desc: 'Retrieve metadata for a CapCut video.',
-        params: [{ key: 'url', label: 'URL', required: true, default: 'https://www.capcut.com/' }]
-      },
-      {
         name: 'TikTok Video',
         path: '/api/download/tiktok',
         method: 'GET',
         desc: 'Download media without watermark from TikTok.',
         params: [{ key: 'url', label: 'URL', required: true, default: 'https://vt.tiktok.com/' }]
+      },
+      {
+        name: 'CapCut Video',
+        path: '/api/download/capcut',
+        method: 'GET',
+        desc: 'Retrieve metadata for a CapCut video.',
+        params: [{ key: 'url', label: 'URL', required: true, default: 'https://www.capcut.com/' }]
       },
       {
         name: 'Instagram Media',
@@ -149,8 +148,7 @@ const MODULES = [
     endpoints: [
       { name: 'Detik News', path: '/api/news/detik', method: 'GET', desc: 'Latest breaking headlines from Detikcom.', params: [] },
       { name: 'Tech Crunch', path: '/api/news/tech', method: 'GET', desc: 'Global technology updates.', params: [] },
-      { name: 'Crypto Bulletin', path: '/api/news/crypto', method: 'GET', desc: 'Real-time cryptocurrency bulletin.', params: [] },
-      { name: 'RSS Stream', path: '/api/news/rss', method: 'GET', desc: 'Custom RSS parser feed.', params: [{ key: 'url', label: 'RSS URL', required: true, default: 'https://rss.cnn.com/rss/edition.rss' }] }
+      { name: 'Crypto Bulletin', path: '/api/news/crypto', method: 'GET', desc: 'Real-time cryptocurrency bulletin.', params: [] }
     ]
   },
   {
@@ -180,7 +178,7 @@ const MODULES = [
       { name: 'NPM Stalker', path: '/api/stalk/npm', method: 'GET', desc: 'Inspect NPM package registry stats.', params: [{ key: 'package', label: 'PACKAGE', required: true, default: 'react' }] }
     ]
   },
-    {
+  {
     id: 'M13',
     name: 'TOOLS',
     path: '/docs/tools',
@@ -192,35 +190,16 @@ const MODULES = [
         desc: 'Cari gambar dan stok foto beresolusi tinggi dari Pinterest.', 
         params: [{ key: 'query', label: 'QUERY', required: true, default: 'albert wesker' }] 
       },
-      { 
-        name: 'AI Coder', 
-        path: '/api/tools/aicoder', 
-        method: 'GET', 
-        desc: 'Algorithm code solver and debugger.', 
-        params: [{ key: 'text', label: 'TEXT', required: true, default: 'binary search tree in python' }] 
-      },
-      { 
-        name: 'Checker Ban WA', 
-        path: '/api/tools/checker-ban-wa', 
-        method: 'GET', 
-        desc: 'Verify if a WhatsApp number is banned or active.', 
-        params: [{ key: 'number', label: 'PHONE NUMBER', required: true, default: '628123456789' }] 
-      },
-      { 
-        name: 'Domain Info', 
-        path: '/api/tools/domaininfo', 
-        method: 'GET', 
-        desc: 'WHOIS and DNS domain records inquiry.', 
-        params: [{ key: 'domain', label: 'DOMAIN', required: true, default: 'google.com' }] 
-      }
+      { name: 'AI Coder', path: '/api/tools/aicoder', method: 'GET', desc: 'Algorithm code solver and debugger.', params: [{ key: 'text', label: 'TEXT', required: true, default: 'binary search tree in python' }] },
+      { name: 'Checker Ban WA', path: '/api/tools/checker-ban-wa', method: 'GET', desc: 'Verify if a WhatsApp number is banned or active.', params: [{ key: 'number', label: 'PHONE NUMBER', required: true, default: '628123456789' }] },
+      { name: 'Domain Info', path: '/api/tools/domaininfo', method: 'GET', desc: 'WHOIS and DNS domain records inquiry.', params: [{ key: 'domain', label: 'DOMAIN', required: true, default: 'google.com' }] }
     ]
   }
-
+];
 
 export default function App() {
   const [filter, setFilter] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  // Diubah menjadi objek kosong agar semuanya tertutup secara default
   const [openModules, setOpenModules] = useState({});
   const [activeEp, setActiveEp] = useState(null);
   const [inputs, setInputs] = useState({});
@@ -313,7 +292,6 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      {/* Sidebar Navigation Drawer */}
       {sidebarOpen && <div className="sidebar-backdrop" onClick={() => setSidebarOpen(false)}></div>}
       <aside className={`sidebar-drawer ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-head">
@@ -355,7 +333,6 @@ export default function App() {
       </aside>
 
       <div className="main-viewport">
-        {/* Navbar Atas */}
         <header className="header-bar">
           <div className="brand-left">
             <button className="menu-burger-btn" onClick={() => setSidebarOpen(true)}>
@@ -372,7 +349,6 @@ export default function App() {
           </div>
         </header>
 
-        {/* Hero Section Banner */}
         <section className="hero-terminal-box">
           <div className="terminal-badge">
             <span className="live-spark"></span> TERMINAL ACTIVE
@@ -400,7 +376,6 @@ export default function App() {
           </div>
         </section>
 
-        {/* Search Bar Filter */}
         <div className="filter-block">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#71717a" strokeWidth="2.5">
             <circle cx="11" cy="11" r="8"></circle>
@@ -414,7 +389,6 @@ export default function App() {
           />
         </div>
 
-        {/* Daftar Modul */}
         <div className="modules-stack">
           {MODULES.map((mod, idx) => {
             const isOpenMod = !!openModules[mod.id];
@@ -445,7 +419,6 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* Daftar Endpoints di dalam Modul */}
                 {isOpenMod && (
                   <div className="endpoints-drawer-list">
                     {filteredEps.map((ep) => {
@@ -520,7 +493,6 @@ export default function App() {
                                 {r.loading ? 'COMPUTING STREAM...' : 'EXECUTE REQUEST'}
                               </button>
 
-                              {/* Response Box JSON */}
                               {r.data && (
                                 <div className="response-box">
                                   <div className="response-box-head">
