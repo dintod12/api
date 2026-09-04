@@ -180,17 +180,42 @@ const MODULES = [
       { name: 'NPM Stalker', path: '/api/stalk/npm', method: 'GET', desc: 'Inspect NPM package registry stats.', params: [{ key: 'package', label: 'PACKAGE', required: true, default: 'react' }] }
     ]
   },
-  {
+    {
     id: 'M13',
     name: 'TOOLS',
     path: '/docs/tools',
     endpoints: [
-      { name: 'AI Coder', path: '/api/tools/aicoder', method: 'GET', desc: 'Algorithm code solver and debugger.', params: [{ key: 'text', label: 'TEXT', required: true, default: 'binary search tree in python' }] },
-      { name: 'Checker Ban WA', path: '/api/tools/checker-ban-wa', method: 'GET', desc: 'Verify if a WhatsApp number is banned or active.', params: [{ key: 'number', label: 'PHONE NUMBER', required: true, default: '628123456789' }] },
-      { name: 'Domain Info', path: '/api/tools/domaininfo', method: 'GET', desc: 'WHOIS and DNS domain records inquiry.', params: [{ key: 'domain', label: 'DOMAIN', required: true, default: 'google.com' }] }
+      { 
+        name: 'Pinterest Search', 
+        path: '/api/tools/pinterest', 
+        method: 'GET', 
+        desc: 'Cari gambar dan stok foto beresolusi tinggi dari Pinterest.', 
+        params: [{ key: 'query', label: 'QUERY', required: true, default: 'albert wesker' }] 
+      },
+      { 
+        name: 'AI Coder', 
+        path: '/api/tools/aicoder', 
+        method: 'GET', 
+        desc: 'Algorithm code solver and debugger.', 
+        params: [{ key: 'text', label: 'TEXT', required: true, default: 'binary search tree in python' }] 
+      },
+      { 
+        name: 'Checker Ban WA', 
+        path: '/api/tools/checker-ban-wa', 
+        method: 'GET', 
+        desc: 'Verify if a WhatsApp number is banned or active.', 
+        params: [{ key: 'number', label: 'PHONE NUMBER', required: true, default: '628123456789' }] 
+      },
+      { 
+        name: 'Domain Info', 
+        path: '/api/tools/domaininfo', 
+        method: 'GET', 
+        desc: 'WHOIS and DNS domain records inquiry.', 
+        params: [{ key: 'domain', label: 'DOMAIN', required: true, default: 'google.com' }] 
+      }
     ]
   }
-];
+
 
 export default function App() {
   const [filter, setFilter] = useState('');
