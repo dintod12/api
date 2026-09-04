@@ -2,125 +2,141 @@ import { useState, useEffect, useRef } from 'react';
 
 const MODULES = [
   {
-    id: 'TRANSFORMER_CORE',
-    name: 'MATRIX // MECHA CORE (AI)',
+    id: 'AI',
+    name: 'AI MODULE',
     endpoints: [
       {
-        name: 'AUTOBOT AI // DUCKAI',
+        name: 'AI Duckai',
         path: '/api/ai/duckai',
         method: 'GET',
-        desc: 'Core neural computation unit across multi-tier LLM architecture.',
+        desc: 'Multi-model artificial intelligence query engine.',
         params: [
-          { key: 'message', label: 'TRANSMISSION', required: true, default: 'What is the meaning of life?' },
-          { key: 'model', label: 'NEURAL CORE', required: false, default: 'gpt-4o-mini' },
-          { key: 'systemPrompt', label: 'DIRECTIVE', required: false, default: 'You are an advanced Transformer AI' }
+          { key: 'message', label: 'MESSAGE', required: true, default: 'What is the meaning of life?' },
+          { key: 'model', label: 'MODEL', required: false, default: 'gpt-4o-mini' },
+          { key: 'systemPrompt', label: 'SYSTEM PROMPT', required: false, default: 'You are a helpful assistant' }
         ]
       },
       {
-        name: 'ORACLE SCROLL // BIBLE AI',
-        path: '/api/ai/bibleai',
-        method: 'GET',
-        desc: 'Sacred text archive decoder and contextual scriptural analyzer.',
-        params: [
-          { key: 'question', label: 'QUERY SCRIPTURE', required: true, default: 'What is faith?' },
-          { key: 'translation', label: 'CODEX TRANSLATION', required: false, default: 'ESV' }
-        ]
-      },
-      {
-        name: 'HOLO MATRIX // FLIXIER',
+        name: 'Flixier AI Image',
         path: '/api/ai/flixier',
         method: 'GET',
-        desc: 'Holographic optical neural reconstruction via prompt parameters.',
-        params: [{ key: 'prompt', label: 'RENDER MATRIX', required: true, default: 'Optimus mecha robot metallic glowing red eyes' }]
+        desc: 'Render artwork matrices via text prompt.',
+        params: [{ key: 'prompt', label: 'PROMPT', required: true, default: 'transformer mecha cyber robot' }]
+      },
+      {
+        name: 'AI Lyrics Generator',
+        path: '/api/ai/lyricsgen',
+        method: 'GET',
+        desc: 'Generate lyrics and rhythmic poems.',
+        params: [{ key: 'title', label: 'TITLE', required: true, default: 'Cyberpunk night' }]
+      },
+      {
+        name: 'AI Chat (ai4chat)',
+        path: '/api/ai/ai4chat',
+        method: 'GET',
+        desc: 'Direct conversation AI interface.',
+        params: [{ key: 'message', label: 'MESSAGE', required: true, default: 'Hello AI' }]
       }
     ]
   },
   {
-    id: 'TELEMETRY_EXTRACTION',
-    name: 'INTERCEPTOR // DOWNLOADERS',
+    id: 'DOWNLOAD',
+    name: 'DOWNLOADER MODULE',
     endpoints: [
       {
-        name: 'CAPCUT // VECTOR RIPPER',
+        name: 'CapCut Video',
         path: '/api/download/capcut',
         method: 'GET',
-        desc: 'Extract visual frames and raw rendering metadata streams.',
-        params: [{ key: 'url', label: 'TARGET LINK', required: true, default: 'https://www.capcut.com/' }]
+        desc: 'Retrieve comprehensive metadata for a CapCut video by providing its URL.',
+        params: [{ key: 'url', label: 'URL', required: true, default: 'https://www.capcut.com/' }]
       },
       {
-        name: 'TIKTOK // SIGNAL INTERCEPT',
+        name: 'TikTok Video',
         path: '/api/download/tiktok',
         method: 'GET',
-        desc: 'Bypass sensory watermarks and stream direct MP4 data packets.',
-        params: [{ key: 'url', label: 'PAYLOAD STREAM', required: true, default: 'https://vt.tiktok.com/' }]
+        desc: 'Download media without watermark from TikTok.',
+        params: [{ key: 'url', label: 'URL', required: true, default: 'https://vt.tiktok.com/' }]
       },
       {
-        name: 'INSTAGRAM // MEDIA EXTRACTION',
+        name: 'Instagram Media',
         path: '/api/download/instagram',
         method: 'GET',
-        desc: 'Scrape edge media nodes across distributed server nets.',
-        params: [{ key: 'url', label: 'NETWORK NODE', required: true, default: 'https://www.instagram.com/p/' }]
+        desc: 'Scrape Instagram video, reel, and image content.',
+        params: [{ key: 'url', label: 'URL', required: true, default: 'https://www.instagram.com/p/' }]
+      },
+      {
+        name: 'DramaBox Video',
+        path: '/api/download/dramabox',
+        method: 'GET',
+        desc: 'Extract DramaBox stream details.',
+        params: [{ key: 'url', label: 'URL', required: true, default: '' }]
       }
     ]
   },
   {
-    id: 'CYBER_TOOLS',
-    name: 'CYBERNETIC // SYSTEM UTILS',
+    id: 'TOOLS',
+    name: 'TOOLS & NEWS MODULE',
     endpoints: [
       {
-        name: 'CODE FORGE // AI CODER',
+        name: 'AI Coder',
         path: '/api/tools/aicoder',
         method: 'GET',
-        desc: 'Autonomous logic compiler and algorithm optimizer.',
-        params: [{ key: 'text', label: 'ALGORITHM SPEC', required: true, default: 'binary search tree in rust' }]
+        desc: 'Algorithm code solver and debugger.',
+        params: [{ key: 'text', label: 'TEXT', required: true, default: 'binary search tree in python' }]
       },
       {
-        name: 'FIREWALL // WA SCANNER',
+        name: 'Checker Ban WA',
         path: '/api/tools/checker-ban-wa',
         method: 'GET',
-        desc: 'Proactive cellular node validator and ban telemetry checker.',
-        params: [{ key: 'number', label: 'SIGNAL IDENTIFIER', required: true, default: '628123456789' }]
+        desc: 'Verify if a WhatsApp number is banned or active.',
+        params: [{ key: 'number', label: 'PHONE NUMBER', required: true, default: '628123456789' }]
       },
       {
-        name: 'GRID SCANNER // DOMAIN INFO',
+        name: 'Domain Info',
         path: '/api/tools/domaininfo',
         method: 'GET',
-        desc: 'Full IP route mapping and WHOIS structural analysis.',
-        params: [{ key: 'domain', label: 'IP ROUTE', required: true, default: 'google.com' }]
+        desc: 'WHOIS and DNS domain records inquiry.',
+        params: [{ key: 'domain', label: 'DOMAIN', required: true, default: 'google.com' }]
+      },
+      {
+        name: 'Detik News',
+        path: '/api/news/detik',
+        method: 'GET',
+        desc: 'Latest breaking headlines from Detikcom.',
+        params: []
       }
     ]
   }
 ];
 
-// Komponen Background Partikel Kotak-Kotak (Cyber Cube Matrix)
-function TransformerCanvas() {
+function ParticleMatrix() {
   const canvasRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
-    let animationFrameId;
+    let animId;
 
-    const resize = () => {
+    const setSize = () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
     };
-    resize();
-    window.addEventListener('resize', resize);
+    setSize();
+    window.addEventListener('resize', setSize);
 
-    // Generator partikel kotak (cubes)
-    const cubes = Array.from({ length: 45 }).map(() => ({
+    const cubes = Array.from({ length: 40 }).map(() => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
-      size: Math.random() * 20 + 8,
-      speedX: (Math.random() - 0.5) * 0.8,
-      speedY: (Math.random() - 0.5) * 0.8,
+      size: Math.random() * 18 + 8,
+      speedX: (Math.random() - 0.5) * 0.6,
+      speedY: (Math.random() - 0.5) * 0.6,
       rot: Math.random() * Math.PI,
       rotSpeed: (Math.random() - 0.5) * 0.02,
       opacity: Math.random() * 0.5 + 0.15,
-      hue: Math.random() > 0.5 ? 190 : 25 // Variasi warna Cyan & Transformer Amber
+      hue: Math.random() > 0.5 ? 210 : 35
     }));
 
-    const render = () => {
+    const draw = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       cubes.forEach((cube) => {
@@ -137,110 +153,104 @@ function TransformerCanvas() {
         ctx.translate(cube.x, cube.y);
         ctx.rotate(cube.rot);
 
-        // Render kotak sci-fi bertingkat
         ctx.strokeStyle = `hsla(${cube.hue}, 100%, 50%, ${cube.opacity})`;
-        ctx.lineWidth = 1.2;
+        ctx.lineWidth = 1;
         ctx.strokeRect(-cube.size / 2, -cube.size / 2, cube.size, cube.size);
 
-        // Inti titik holografik di dalam kotak
-        ctx.fillStyle = `hsla(${cube.hue}, 100%, 70%, ${cube.opacity * 0.7})`;
+        ctx.fillStyle = `hsla(${cube.hue}, 100%, 75%, ${cube.opacity * 0.7})`;
         ctx.fillRect(-2, -2, 4, 4);
 
         ctx.restore();
       });
 
-      animationFrameId = requestAnimationFrame(render);
+      animId = requestAnimationFrame(draw);
     };
 
-    render();
+    draw();
 
     return () => {
-      window.removeEventListener('resize', resize);
-      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('resize', setSize);
+      cancelAnimationFrame(animId);
     };
   }, []);
 
-  return <canvas ref={canvasRef} className="transformer-bg-canvas" />;
+  return <canvas ref={canvasRef} className="cube-canvas" />;
 }
 
 export default function App() {
-  const [filterText, setFilterText] = useState('');
-  const [activeEpPath, setActiveEpPath] = useState('/api/ai/duckai');
-  const [formInputs, setFormInputs] = useState({
+  const [filter, setFilter] = useState('');
+  const [activeEp, setActiveEp] = useState('/api/ai/duckai');
+  const [inputs, setInputs] = useState({
     '/api/ai/duckai': { message: 'What is the meaning of life?' }
   });
-  const [executionState, setExecutionState] = useState({});
+  const [runs, setRuns] = useState({});
   const [activeTab, setActiveTab] = useState('PREVIEW');
-  const [copyStatus, setCopyStatus] = useState(false);
+  const [copiedPath, setCopiedPath] = useState(null);
 
-  const toggleEndpoint = (ep) => {
-    if (activeEpPath === ep.path) {
-      setActiveEpPath(null);
+  const toggle = (ep) => {
+    if (activeEp === ep.path) {
+      setActiveEp(null);
     } else {
-      setActiveEpPath(ep.path);
-      if (!formInputs[ep.path]) {
-        const initial = {};
+      setActiveEp(ep.path);
+      if (!inputs[ep.path]) {
+        const init = {};
         ep.params.forEach((p) => {
-          initial[p.key] = p.default;
+          init[p.key] = p.default;
         });
-        setFormInputs((prev) => ({ ...prev, [ep.path]: initial }));
+        setInputs((prev) => ({ ...prev, [ep.path]: init }));
       }
     }
   };
 
-  const handleInputChange = (path, key, value) => {
-    setFormInputs((prev) => ({
+  const setParam = (path, key, val) => {
+    setInputs((prev) => ({
       ...prev,
-      [path]: {
-        ...(prev[path] || {}),
-        [key]: value
-      }
+      [path]: { ...(prev[path] || {}), [key]: val }
     }));
   };
 
-  const handleExecute = async (ep) => {
-    const currentParams = formInputs[ep.path] || {};
-    const queryParams = new URLSearchParams();
-    Object.entries(currentParams).forEach(([k, v]) => {
-      if (v !== undefined && v !== '') queryParams.append(k, v);
+  const execute = async (ep) => {
+    const curParams = inputs[ep.path] || {};
+    const qs = new URLSearchParams();
+    Object.entries(curParams).forEach(([k, v]) => {
+      if (v !== undefined && v !== '') qs.append(k, v);
     });
 
-    const targetUrl = `${ep.path}${queryParams.toString() ? '?' + queryParams.toString() : ''}`;
+    const targetUrl = `${ep.path}${qs.toString() ? '?' + qs.toString() : ''}`;
 
-    setExecutionState((prev) => ({
+    setRuns((prev) => ({
       ...prev,
       [ep.path]: { ...prev[ep.path], loading: true }
     }));
 
-    const startTime = performance.now();
+    const start = performance.now();
 
     try {
       const res = await fetch(targetUrl);
       const data = await res.json();
-      const endTime = performance.now();
+      const end = performance.now();
 
-      setExecutionState((prev) => ({
+      setRuns((prev) => ({
         ...prev,
         [ep.path]: {
           loading: false,
           status: res.status,
-          latency: Math.round(endTime - startTime),
+          latency: Math.round(end - start),
           url: targetUrl,
           headers: {
-            'content-type': res.headers.get('content-type') || 'application/json',
-            protocol: 'CYBER-HTTP/2.0'
+            'content-type': res.headers.get('content-type') || 'application/json'
           },
           data
         }
       }));
     } catch (err) {
-      const endTime = performance.now();
-      setExecutionState((prev) => ({
+      const end = performance.now();
+      setRuns((prev) => ({
         ...prev,
         [ep.path]: {
           loading: false,
           status: 500,
-          latency: Math.round(endTime - startTime),
+          latency: Math.round(end - start),
           url: targetUrl,
           headers: { 'content-type': 'application/json' },
           data: { status: false, error: err.message }
@@ -249,185 +259,190 @@ export default function App() {
     }
   };
 
-  const copyJson = (data) => {
+  const copyJson = (path, data) => {
     if (!data) return;
     navigator.clipboard.writeText(JSON.stringify(data, null, 2));
-    setCopyStatus(true);
-    setTimeout(() => setCopyStatus(false), 1500);
+    setCopiedPath(path);
+    setTimeout(() => setCopiedPath(null), 1500);
   };
 
   return (
-    <div className="mecha-viewport">
-      <TransformerCanvas />
+    <div className="app-shell">
+      <ParticleMatrix />
 
-      <div className="mecha-interface">
-        {/* HUD Top Bar */}
-        <header className="mecha-navbar">
-          <div className="hud-corner-tl"></div>
-          <div className="hud-corner-tr"></div>
-
-          <div className="mecha-brand">
-            <div className="mecha-emblem">⬡</div>
-            <div>
-              <div className="mecha-title">DINSTORE // MECHATRON</div>
-              <div className="mecha-sub">SYSTEM STATE: ARMED // QUANTUM ENGINE 4.0</div>
-            </div>
+      <div className="main-viewport">
+        {/* Navbar */}
+        <header className="header-bar">
+          <div className="brand-group">
+            <span className="brand-dot"></span>
+            <span className="brand-title">API SIPUTZX // DINSTORE</span>
           </div>
-
-          <div className="mecha-status-block">
-            <span className="spark-box"></span> CORE ONLINE
+          <div className="status-pill">
+            <span className="live-spark"></span> ONLINE
           </div>
         </header>
 
-        {/* Tactical Search Filter */}
-        <div className="hud-search-shell">
-          <span className="hud-tag">TARGET_SCAN:</span>
+        {/* Filter */}
+        <div className="filter-block">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#71717a" strokeWidth="2.5">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
           <input
             type="text"
-            placeholder="SCAN CIPHER / PROTOCOL PATH..."
-            value={filterText}
-            onChange={(e) => setFilterText(e.target.value)}
+            placeholder="FILTER ENDPOINTS..."
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
           />
         </div>
 
-        {/* Modules Stream */}
-        <div className="hud-stream">
-          {MODULES.map((module) => {
-            const filteredEps = module.endpoints.filter(
-              (e) =>
-                e.name.toLowerCase().includes(filterText.toLowerCase()) ||
-                e.path.toLowerCase().includes(filterText.toLowerCase())
+        {/* Endpoint Modules */}
+        <div className="modules-stack">
+          {MODULES.map((mod) => {
+            const filteredEps = mod.endpoints.filter((e) =>
+              e.name.toLowerCase().includes(filter.toLowerCase()) ||
+              e.path.toLowerCase().includes(filter.toLowerCase())
             );
 
-            if (filterText && filteredEps.length === 0) return null;
+            if (filter && filteredEps.length === 0) return null;
 
             return (
-              <div key={module.id} className="hud-module-unit">
-                <div className="module-banner">
-                  <span className="bracket-left">[</span>
-                  <span>{module.name}</span>
-                  <span className="bracket-right">]</span>
-                  <span className="ep-counter">{filteredEps.length} NODES</span>
+              <div key={mod.id} className="module-group">
+                <div className="module-label">
+                  <span>{mod.name}</span>
+                  <span className="module-counter">{filteredEps.length} ENDPOINTS</span>
                 </div>
 
-                <div className="endpoint-collection">
+                <div className="endpoints-flow">
                   {filteredEps.map((ep) => {
-                    const isOpen = activeEpPath === ep.path;
-                    const exec = executionState[ep.path] || {};
-                    const currentVals = formInputs[ep.path] || {};
+                    const isOpen = activeEp === ep.path;
+                    const r = runs[ep.path] || {};
+                    const curVals = inputs[ep.path] || {};
 
                     return (
-                      <div key={ep.path} className={`mecha-card ${isOpen ? 'active-slot' : ''}`}>
-                        <div className="card-click-zone" onClick={() => toggleEndpoint(ep)}>
-                          <div className="ep-badge-wrap">
-                            <span className="mecha-badge">{ep.method}</span>
-                            <span className="ep-route">{ep.path}</span>
-                            <span className="ep-alias">{ep.name}</span>
+                      <div key={ep.path} className={`ep-card ${isOpen ? 'expanded' : ''}`}>
+                        <div className="ep-card-head" onClick={() => toggle(ep)}>
+                          <div className="ep-info">
+                            <span className="get-tag">{ep.method}</span>
+                            <span className="ep-path-txt">{ep.path}</span>
+                            <span className="ep-alias-txt">{ep.name}</span>
                           </div>
-                          <span className="hud-chevron">{isOpen ? '▲' : '▼'}</span>
+                          <span className="arrow-sym">{isOpen ? '˄' : '˅'}</span>
                         </div>
 
-                        {/* Playground Drawer */}
                         {isOpen && (
-                          <div className="mecha-drawer">
-                            <p className="mecha-desc">// {ep.desc}</p>
+                          <div className="ep-body">
+                            <p className="ep-desc-txt">{ep.desc}</p>
 
-                            <div className="input-matrix">
-                              {ep.params.map((p) => (
-                                <div key={p.key} className="matrix-field">
-                                  <label>
-                                    ▶ {p.label} {p.required && <span className="neon-star">*</span>}
-                                  </label>
-
-                                  {p.key === 'model' ? (
-                                    <select
-                                      value={currentVals[p.key] ?? p.default}
-                                      onChange={(e) => handleInputChange(ep.path, p.key, e.target.value)}
-                                    >
-                                      <option value="gpt-4o-mini">gpt-4o-mini</option>
-                                      <option value="claude-3-5-haiku-latest">claude-3-5-haiku-latest</option>
-                                      <option value="meta-llama/Llama-4-Scout-17B-16E-Instruct">meta-llama/Llama-4-Scout-17B-16E-Instruct</option>
-                                      <option value="mistralai/Mistral-Small-24B-Instruct-2501">mistralai/Mistral-Small-24B-Instruct-2501</option>
-                                      <option value="openai/gpt-oss-120b">openai/gpt-oss-120b</option>
-                                      <option value="gpt-5-mini">gpt-5-mini</option>
-                                    </select>
-                                  ) : p.key === 'translation' ? (
-                                    <select
-                                      value={currentVals[p.key] ?? p.default}
-                                      onChange={(e) => handleInputChange(ep.path, p.key, e.target.value)}
-                                    >
-                                      <option value="ESV">ESV (ENGLISH STANDARD VERSION)</option>
-                                      <option value="NIV">NIV (NEW INTERNATIONAL VERSION)</option>
-                                      <option value="KJV">KJV (KING JAMES VERSION)</option>
-                                      <option value="TB">TB (INDONESIAN TERJEMAHAN BARU)</option>
-                                    </select>
-                                  ) : (
-                                    <input
-                                      type="text"
-                                      value={currentVals[p.key] ?? ''}
-                                      placeholder={p.default}
-                                      onChange={(e) => handleInputChange(ep.path, p.key, e.target.value)}
-                                    />
-                                  )}
-                                </div>
-                              ))}
+                            <div className="method-toggles">
+                              <span className="m-pill active">GET</span>
+                              <span className="m-pill muted">POST</span>
                             </div>
 
-                            {/* Execute Beam Button */}
+                            {ep.params.length > 0 && (
+                              <div className="params-area">
+                                <span className="params-header-txt">REQUEST PARAMETERS</span>
+                                {ep.params.map((p) => (
+                                  <div key={p.key} className="form-item">
+                                    <label>
+                                      {p.label} {p.required && <span className="req-point">*</span>}
+                                    </label>
+                                    {p.key === 'model' ? (
+                                      <select
+                                        value={curVals[p.key] ?? p.default}
+                                        onChange={(e) => setParam(ep.path, p.key, e.target.value)}
+                                      >
+                                        <option value="gpt-4o-mini">gpt-4o-mini</option>
+                                        <option value="claude-3-5-haiku-latest">claude-3-5-haiku-latest</option>
+                                        <option value="meta-llama/Llama-4-Scout-17B-16E-Instruct">meta-llama/Llama-4-Scout-17B-16E-Instruct</option>
+                                        <option value="mistralai/Mistral-Small-24B-Instruct-2501">mistralai/Mistral-Small-24B-Instruct-2501</option>
+                                        <option value="openai/gpt-oss-120b">openai/gpt-oss-120b</option>
+                                        <option value="gpt-5-mini">gpt-5-mini</option>
+                                      </select>
+                                    ) : (
+                                      <input
+                                        type="text"
+                                        value={curVals[p.key] ?? ''}
+                                        placeholder={p.default}
+                                        onChange={(e) => setParam(ep.path, p.key, e.target.value)}
+                                      />
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+
                             <button
                               type="button"
-                              className="btn-mecha-execute"
-                              disabled={exec.loading}
-                              onClick={() => handleExecute(ep)}
+                              className="btn-exec"
+                              disabled={r.loading}
+                              onClick={() => execute(ep)}
                             >
-                              <span className="btn-glow-bar"></span>
-                              {exec.loading ? 'COMPUTING QUANTUM THREAD...' : 'EXECUTE NEURAL TRANSMISSION ⚡'}
+                              {r.loading ? 'COMPUTING STREAM...' : 'EXECUTE REQUEST'}
                             </button>
 
-                            {/* Inline Result Terminal View */}
-                            {exec.data && (
-                              <div className="mecha-terminal">
-                                <div className="term-hud-top">
-                                  <div className="term-tabs">
+                            {/* Response Box Tepat di Bawah Endpoint */}
+                            {r.data && (
+                              <div className="response-box">
+                                <div className="response-box-head">
+                                  <div className="tabs-cluster">
                                     <button
-                                      className={`term-tab ${activeTab === 'PREVIEW' ? 'active' : ''}`}
+                                      className={`tab-btn ${activeTab === 'PREVIEW' ? 'active' : ''}`}
                                       onClick={() => setActiveTab('PREVIEW')}
                                     >
-                                      TELEMETRY PREVIEW
+                                      PREVIEW
                                     </button>
                                     <button
-                                      className={`term-tab ${activeTab === 'HEADERS' ? 'active' : ''}`}
+                                      className={`tab-btn ${activeTab === 'HEADERS' ? 'active' : ''}`}
                                       onClick={() => setActiveTab('HEADERS')}
                                     >
                                       HEADERS
                                     </button>
+                                    <button
+                                      className={`tab-btn ${activeTab === 'CURL' ? 'active' : ''}`}
+                                      onClick={() => setActiveTab('CURL')}
+                                    >
+                                      CURL
+                                    </button>
                                   </div>
 
-                                  <div className="term-ctrls">
-                                    {/* Copy Button */}
+                                  <div className="head-right-actions">
                                     <button
-                                      className="btn-copy-cube"
-                                      title="Copy Matrix JSON"
-                                      onClick={() => copyJson(exec.data)}
+                                      className="copy-trigger"
+                                      title="Copy JSON Response"
+                                      onClick={() => copyJson(ep.path, r.data)}
                                     >
-                                      {copyStatus ? 'COPIED ✓' : 'COPY JSON ⧉'}
+                                      {copiedPath === ep.path ? (
+                                        <span className="copied-flag">✓</span>
+                                      ) : (
+                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                        </svg>
+                                      )}
                                     </button>
 
-                                    <span className={`hud-badge-status ${exec.status === 200 ? 'status-ok' : 'status-err'}`}>
-                                      [{exec.status} {exec.status === 200 ? 'OK' : 'ERR'}]
+                                    <span className={`status-tag ${r.status === 200 ? 'ok' : 'err'}`}>
+                                      {r.status} {r.status === 200 ? 'OK' : 'ERR'}
                                     </span>
-                                    {exec.latency && <span className="hud-latency">{exec.latency}ms</span>}
+                                    {r.latency && <span className="latency-lbl">{r.latency}ms</span>}
                                   </div>
                                 </div>
 
-                                <div className="term-hud-screen">
-                                  {activeTab === 'PREVIEW' ? (
-                                    <pre className="matrix-code green">
-                                      {JSON.stringify(exec.data, null, 2)}
+                                <div className="response-box-body">
+                                  {activeTab === 'PREVIEW' && (
+                                    <pre className="code-green">
+                                      {JSON.stringify(r.data, null, 2)}
                                     </pre>
-                                  ) : (
-                                    <pre className="matrix-code cyan">
-                                      {JSON.stringify(exec.headers, null, 2)}
+                                  )}
+                                  {activeTab === 'HEADERS' && (
+                                    <pre className="code-cyan">
+                                      {JSON.stringify(r.headers, null, 2)}
+                                    </pre>
+                                  )}
+                                  {activeTab === 'CURL' && (
+                                    <pre className="code-yellow">
+                                      {`curl -X GET "${window.location.origin}${r.url}"`}
                                     </pre>
                                   )}
                                 </div>
