@@ -19,10 +19,19 @@ const MODULES = [
         ]
       },
       {
+        name: 'Bible AI',
+        path: '/api/ai/bibleai',
+        method: 'GET',
+        params: [
+          { key: 'question', default: 'What is faith?' },
+          { key: 'translation', default: 'ESV' }
+        ]
+      },
+      {
         name: 'Flixier AI Image',
         path: '/api/ai/flixier',
         method: 'GET',
-        params: [{ key: 'prompt', default: 'futuristic neon city' }]
+        params: [{ key: 'prompt', default: 'cyberpunk neon warrior' }]
       },
       {
         name: 'AI Lyrics Generator',
@@ -47,19 +56,19 @@ const MODULES = [
         name: 'TikTok Downloader',
         path: '/api/download/tiktok',
         method: 'GET',
-        params: [{ key: 'url', default: 'https://vt.tiktok.com/...' }]
+        params: [{ key: 'url', default: 'https://vt.tiktok.com/' }]
       },
       {
         name: 'Instagram Media',
         path: '/api/download/instagram',
         method: 'GET',
-        params: [{ key: 'url', default: 'https://www.instagram.com/p/...' }]
+        params: [{ key: 'url', default: 'https://www.instagram.com/p/' }]
       },
       {
         name: 'CapCut Video',
         path: '/api/download/capcut',
         method: 'GET',
-        params: [{ key: 'url', default: '' }]
+        params: [{ key: 'url', default: 'https://www.capcut.com/template-detail/' }]
       },
       {
         name: 'DramaBox Streaming',
@@ -109,6 +118,7 @@ export default function App() {
   const [formParams, setFormParams] = useState({});
   const [responseView, setResponseView] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
   const [vault, setVault] = useState([]);
 
   useEffect(() => {
@@ -116,7 +126,7 @@ export default function App() {
     if (saved) {
       try {
         setVault(JSON.parse(saved));
-      } catch (e) {
+      } catch {
         setVault([]);
       }
     }
@@ -175,6 +185,13 @@ export default function App() {
     }
   };
 
+  const copyToClipboard = () => {
+    if (!responseView) return;
+    navigator.clipboard.writeText(JSON.stringify(responseView, null, 2));
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1800);
+  };
+
   const clearStorage = () => {
     localStorage.removeItem(STORE_KEY);
     setVault([]);
@@ -197,7 +214,7 @@ export default function App() {
         </div>
       </header>
 
-      {/* Hero Stats */}
+      {/* Hero Stats Section */}
       <div className="hero">
         <div className="pill">
           <span className="dot"></span> TERMINAL ACTIVE
@@ -235,7 +252,7 @@ export default function App() {
         />
       </div>
 
-      {/* API Module List */}
+      {/* Modules List */}
       {MODULES.map((m, idx) => {
         const isOpen = openModule === m.id;
         const filteredEps = m.endpoints.filter(
@@ -286,7 +303,7 @@ export default function App() {
                               <label>{p.key}</label>
                               {p.key === 'model' ? (
                                 <select
-                                  value={formParams[p.key] || ''}
+                                  value={formParams[p.key] || 'gpt-4o-mini'}
                                   onChange={(e) => handleParamChange(p.key, e.target.value)}
                                 >
                                   <option value="gpt-4o-mini">gpt-4o-mini</option>
@@ -296,7 +313,17 @@ export default function App() {
                                   <option value="openai/gpt-oss-120b">openai/gpt-oss-120b</option>
                                   <option value="gpt-5-mini">gpt-5-mini</option>
                                 </select>
-                              ) : p.key === 'message' || p.key === 'prompt' || p.key === 'text' ? (
+                              ) : p.key === 'translation' ? (
+                                <select
+                                  value={formParams[p.key] || 'ESV'}
+                                  onChange={(e) => handleParamChange(p.key, e.target.value)}
+                                >
+                                  <option value="ESV">ESV (English Standard Version)</option>
+                                  <option value="NIV">NIV (New International Version)</option>
+                                  <option value="KJV">KJV (King James Version)</option>
+                                  <option value="TB">TB (Terjemahan Baru)</option>
+                                </select>
+                              ) : p.key === 'message' || p.key === 'question' || p.key === 'prompt' || p.key === 'text' ? (
                                 <textarea
                                   rows="2"
                                   value={formParams[p.key] || ''}
@@ -327,12 +354,17 @@ export default function App() {
         );
       })}
 
-      {/* JSON Viewer Modal / Card */}
+      {/* Terminal View Response */}
       {responseView && (
         <div className="terminal-viewer">
           <div className="terminal-header">
             <span>JSON TERMINAL RESPONSE</span>
-            <button onClick={() => setResponseView(null)} className="btn-close-term">✕</button>
+            <div className="terminal-actions">
+              <button onClick={copyToClipboard} className="btn-copy">
+                {copied ? 'COPIED!' : 'COPY'}
+              </button>
+              <button onClick={() => setResponseView(null)} className="btn-close-term">✕</button>
+            </div>
           </div>
           <pre>{JSON.stringify(responseView, null, 2)}</pre>
         </div>
@@ -355,11 +387,11 @@ export default function App() {
         </div>
         <div className="history-list">
           {vault.length === 0 ? (
-            <div className="empty-hint">Belum ada request yang disimpan</div>
+            <div className="empty-hint">Belum ada response yang disimpan ke vault</div>
           ) : (
             vault.map((item) => (
               <div key={item.id} className="history-item" onClick={() => setResponseView(item.data)}>
-                <span className="badge-get">GET</span>
+                <span className="badge-get">SAVED</span>
                 <span className="h-name">{item.name}</span>
                 <span className="h-time">{item.time}</span>
               </div>
