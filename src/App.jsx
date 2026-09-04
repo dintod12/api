@@ -253,8 +253,20 @@ export default function App() {
 
     try {
       const res = await fetch(targetUrl);
-      const data = await res.json();
+      const text = await res.text();
       const end = performance.now();
+
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        data = {
+          creator: "DINSTORE",
+          status: false,
+          error: "Server Error / Invalid JSON Response",
+          raw_response: text.slice(0, 300)
+        };
+      }
 
       setRuns((prev) => ({
         ...prev,
