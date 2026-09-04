@@ -37,18 +37,25 @@ export default async function handler(req, res) {
     try {
       data = JSON.parse(text);
     } catch {
-      data = {
-        data: text
-      };
+      data = { data: text };
     }
 
     const isSuccess = response.ok && (data.status === true || data.status === "true");
+
+    // Ambil isi result mentah dari provider
+    const rawResult = data.result ?? data;
+
+    // Bersihkan properti creator/source/debug bawaan provider jika ada
+    const cleanedResult = typeof rawResult === 'object' && rawResult !== null ? { ...rawResult } : { data: rawResult };
+    delete cleanedResult.creator;
+    delete cleanedResult.source;
+    delete cleanedResult.debug;
 
     return res.status(response.status).json({
       creator: "DINSTORE",
       source: "TikTok — DINSTORE",
       status: isSuccess,
-      result: data.result ?? data
+      result: cleanedResult
     });
 
   } catch (error) {
