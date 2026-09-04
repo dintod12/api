@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState } from 'react';
 
 const MODULES = [
   {
@@ -14,6 +14,16 @@ const MODULES = [
           { key: 'message', label: 'MESSAGE', required: true, default: 'What is the meaning of life?' },
           { key: 'model', label: 'MODEL', required: false, default: 'gpt-4o-mini' },
           { key: 'systemPrompt', label: 'SYSTEM PROMPT', required: false, default: 'You are a helpful assistant' }
+        ]
+      },
+      {
+        name: 'Bible AI',
+        path: '/api/ai/bibleai',
+        method: 'GET',
+        desc: 'Explore theological and scripture references.',
+        params: [
+          { key: 'question', label: 'QUESTION', required: true, default: 'What is faith?' },
+          { key: 'translation', label: 'TRANSLATION', required: false, default: 'ESV' }
         ]
       },
       {
@@ -109,74 +119,6 @@ const MODULES = [
   }
 ];
 
-function ParticleMatrix() {
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
-    let animId;
-
-    const setSize = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-    setSize();
-    window.addEventListener('resize', setSize);
-
-    const cubes = Array.from({ length: 40 }).map(() => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height,
-      size: Math.random() * 18 + 8,
-      speedX: (Math.random() - 0.5) * 0.6,
-      speedY: (Math.random() - 0.5) * 0.6,
-      rot: Math.random() * Math.PI,
-      rotSpeed: (Math.random() - 0.5) * 0.02,
-      opacity: Math.random() * 0.5 + 0.15,
-      hue: Math.random() > 0.5 ? 210 : 35
-    }));
-
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      cubes.forEach((cube) => {
-        cube.x += cube.speedX;
-        cube.y += cube.speedY;
-        cube.rot += cube.rotSpeed;
-
-        if (cube.x < -30) cube.x = canvas.width + 30;
-        if (cube.x > canvas.width + 30) cube.x = -30;
-        if (cube.y < -30) cube.y = canvas.height + 30;
-        if (cube.y > canvas.height + 30) cube.y = -30;
-
-        ctx.save();
-        ctx.translate(cube.x, cube.y);
-        ctx.rotate(cube.rot);
-
-        ctx.strokeStyle = `hsla(${cube.hue}, 100%, 50%, ${cube.opacity})`;
-        ctx.lineWidth = 1;
-        ctx.strokeRect(-cube.size / 2, -cube.size / 2, cube.size, cube.size);
-
-        ctx.fillStyle = `hsla(${cube.hue}, 100%, 75%, ${cube.opacity * 0.7})`;
-        ctx.fillRect(-2, -2, 4, 4);
-
-        ctx.restore();
-      });
-
-      animId = requestAnimationFrame(draw);
-    };
-
-    draw();
-
-    return () => {
-      window.removeEventListener('resize', setSize);
-      cancelAnimationFrame(animId);
-    };
-  }, []);
-
-  return <canvas ref={canvasRef} className="cube-canvas" />;
-}
-
 export default function App() {
   const [filter, setFilter] = useState('');
   const [activeEp, setActiveEp] = useState('/api/ai/duckai');
@@ -268,8 +210,6 @@ export default function App() {
 
   return (
     <div className="app-shell">
-      <ParticleMatrix />
-
       <div className="main-viewport">
         {/* Navbar */}
         <header className="header-bar">
@@ -358,6 +298,16 @@ export default function App() {
                                         <option value="mistralai/Mistral-Small-24B-Instruct-2501">mistralai/Mistral-Small-24B-Instruct-2501</option>
                                         <option value="openai/gpt-oss-120b">openai/gpt-oss-120b</option>
                                         <option value="gpt-5-mini">gpt-5-mini</option>
+                                      </select>
+                                    ) : p.key === 'translation' ? (
+                                      <select
+                                        value={curVals[p.key] ?? p.default}
+                                        onChange={(e) => setParam(ep.path, p.key, e.target.value)}
+                                      >
+                                        <option value="ESV">ESV</option>
+                                        <option value="NIV">NIV</option>
+                                        <option value="KJV">KJV</option>
+                                        <option value="TB">TB</option>
                                       </select>
                                     ) : (
                                       <input
