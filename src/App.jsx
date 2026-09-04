@@ -1,17 +1,17 @@
-import { useState, useEffect } from 'react';
-
-const STORE_KEY = 'dinstore_data_history';
+import { useState } from 'react';
 
 const MODULES = [
   {
-    id: 'M01',
-    name: 'AI',
+    id: 'AI',
+    name: 'Artificial Intelligence',
     path: '/api/ai',
+    icon: '◆',
     endpoints: [
       {
         name: 'AI Duckai',
         path: '/api/ai/duckai',
         method: 'GET',
+        desc: 'Multi-model inference engine',
         params: [
           { key: 'message', default: 'What is the meaning of life?' },
           { key: 'model', default: 'gpt-4o-mini' },
@@ -22,6 +22,7 @@ const MODULES = [
         name: 'Bible AI',
         path: '/api/ai/bibleai',
         method: 'GET',
+        desc: 'Theology and scripture explorer',
         params: [
           { key: 'question', default: 'What is faith?' },
           { key: 'translation', default: 'ESV' }
@@ -31,80 +32,93 @@ const MODULES = [
         name: 'Flixier AI Image',
         path: '/api/ai/flixier',
         method: 'GET',
-        params: [{ key: 'prompt', default: 'cyberpunk neon warrior' }]
+        desc: 'Text to high-res visual render',
+        params: [{ key: 'prompt', default: 'futuristic neon cyber city' }]
       },
       {
         name: 'AI Lyrics Generator',
         path: '/api/ai/lyricsgen',
         method: 'GET',
+        desc: 'Structured song & poem generator',
         params: [{ key: 'title', default: 'Cyberpunk night' }]
       },
       {
-        name: 'AI Chat (ai4chat)',
+        name: 'AI Chat 4',
         path: '/api/ai/ai4chat',
         method: 'GET',
+        desc: 'Conversational assistant bot',
         params: [{ key: 'message', default: 'Hello AI' }]
       }
     ]
   },
   {
-    id: 'M02',
-    name: 'DOWNLOAD',
+    id: 'DOWNLOAD',
+    name: 'Media Extractor',
     path: '/api/download',
+    icon: '▼',
     endpoints: [
       {
         name: 'TikTok Downloader',
         path: '/api/download/tiktok',
         method: 'GET',
+        desc: 'No-watermark video fetcher',
         params: [{ key: 'url', default: 'https://vt.tiktok.com/' }]
       },
       {
         name: 'Instagram Media',
         path: '/api/download/instagram',
         method: 'GET',
+        desc: 'Reel, post & image scraper',
         params: [{ key: 'url', default: 'https://www.instagram.com/p/' }]
       },
       {
         name: 'CapCut Video',
         path: '/api/download/capcut',
         method: 'GET',
-        params: [{ key: 'url', default: 'https://www.capcut.com/template-detail/' }]
+        desc: 'Direct template video download',
+        params: [{ key: 'url', default: 'https://www.capcut.com/' }]
       },
       {
-        name: 'DramaBox Streaming',
+        name: 'DramaBox Stream',
         path: '/api/download/dramabox',
         method: 'GET',
+        desc: 'Short-film drama extractor',
         params: [{ key: 'url', default: '' }]
       }
     ]
   },
   {
-    id: 'M03',
-    name: 'TOOLS & NEWS',
+    id: 'TOOLS',
+    name: 'Utilities & News',
     path: '/api/tools',
+    icon: '⚡',
     endpoints: [
       {
-        name: 'AI Coder',
+        name: 'AI Code Solver',
         path: '/api/tools/aicoder',
         method: 'GET',
-        params: [{ key: 'text', default: 'bubble sort in python' }]
+        desc: 'Algorithm & bug refactor engine',
+        params: [{ key: 'text', default: 'binary search tree python' }]
       },
       {
         name: 'Checker Ban WA',
         path: '/api/tools/checker-ban-wa',
         method: 'GET',
+        desc: 'WhatsApp account status inspector',
         params: [{ key: 'number', default: '628123456789' }]
       },
       {
-        name: 'Domain Info',
+        name: 'Domain Inspector',
         path: '/api/tools/domaininfo',
         method: 'GET',
+        desc: 'WHOIS & DNS records query',
         params: [{ key: 'domain', default: 'google.com' }]
       },
       {
-        name: 'Detik News',
+        name: 'Detik Live News',
         path: '/api/news/detik',
         method: 'GET',
+        desc: 'Real-time Indonesian news feed',
         params: []
       }
     ]
@@ -113,24 +127,14 @@ const MODULES = [
 
 export default function App() {
   const [search, setSearch] = useState('');
-  const [openModule, setOpenModule] = useState('M01');
+  const [selectedTag, setSelectedTag] = useState('ALL');
+  const [openModule, setOpenModule] = useState('AI');
   const [activeEp, setActiveEp] = useState(null);
   const [formParams, setFormParams] = useState({});
   const [responseView, setResponseView] = useState(null);
+  const [latency, setLatency] = useState(null);
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [vault, setVault] = useState([]);
-
-  useEffect(() => {
-    const saved = localStorage.getItem(STORE_KEY);
-    if (saved) {
-      try {
-        setVault(JSON.parse(saved));
-      } catch {
-        setVault([]);
-      }
-    }
-  }, []);
 
   const totalEndpoints = MODULES.reduce((acc, curr) => acc + curr.endpoints.length, 0);
 
@@ -140,20 +144,21 @@ export default function App() {
       return;
     }
     setActiveEp(ep);
-    const initialParams = {};
+    const initial = {};
     ep.params.forEach((p) => {
-      initialParams[p.key] = p.default;
+      initial[p.key] = p.default;
     });
-    setFormParams(initialParams);
+    setFormParams(initial);
   };
 
-  const handleParamChange = (key, value) => {
-    setFormParams((prev) => ({ ...prev, [key]: value }));
+  const handleParamChange = (key, val) => {
+    setFormParams((prev) => ({ ...prev, [key]: val }));
   };
 
   const executeApi = async (e) => {
     e.preventDefault();
     setLoading(true);
+    const startTime = performance.now();
 
     const queryParams = new URLSearchParams();
     Object.entries(formParams).forEach(([k, v]) => {
@@ -166,20 +171,13 @@ export default function App() {
     try {
       const res = await fetch(targetUrl);
       const data = await res.json();
+      const endTime = performance.now();
+      
+      setLatency(Math.round(endTime - startTime));
       setResponseView(data);
-
-      const entry = {
-        id: Date.now(),
-        name: activeEp.name,
-        path: activeEp.path,
-        time: new Date().toLocaleTimeString(),
-        data
-      };
-      const updatedVault = [entry, ...vault];
-      setVault(updatedVault);
-      localStorage.setItem(STORE_KEY, JSON.stringify(updatedVault));
     } catch (err) {
       setResponseView({ status: false, error: err.message });
+      setLatency(null);
     } finally {
       setLoading(false);
     }
@@ -189,71 +187,80 @@ export default function App() {
     if (!responseView) return;
     navigator.clipboard.writeText(JSON.stringify(responseView, null, 2));
     setCopied(true);
-    setTimeout(() => setCopied(false), 1800);
-  };
-
-  const clearStorage = () => {
-    localStorage.removeItem(STORE_KEY);
-    setVault([]);
-    setResponseView(null);
+    setTimeout(() => setCopied(false), 1500);
   };
 
   return (
     <div className="container">
       {/* Top Navbar */}
-      <header className="navbar">
+      <header className="navbar glass-panel">
         <div className="brand">
           <div className="avatar">D</div>
           <div>
             <div className="brand-title">DINSTORE</div>
-            <div className="brand-sub">API SYSTEM</div>
+            <div className="brand-sub">ENGINE 3.0.0</div>
           </div>
         </div>
         <div className="online-badge">
-          <span className="dot"></span> ONLINE
+          <span className="pulse-dot"></span> CONNECTED
         </div>
       </header>
 
-      {/* Hero Stats Section */}
-      <div className="hero">
-        <div className="pill">
-          <span className="dot"></span> TERMINAL ACTIVE
+      {/* Hero Terminal Card */}
+      <section className="hero">
+        <div className="terminal-pill">
+          <span>●</span> CLOUD GATEWAY ACTIVE
         </div>
         <h1 className="hero-title">
-          DINSTORE <span className="version">3.0.0</span>
+          DINSTORE <span className="glow-version">v3.0.0</span>
         </h1>
         <p className="hero-desc">
-          A comprehensive and user friendly API solution for modern applications.
+          High-performance unified API portal and developer testing environment.
         </p>
 
-        <div className="stats-row">
-          <div className="stat-card">
-            <span className="stat-label">CATEGORIES</span>
+        {/* Counter Stats */}
+        <div className="stats-grid">
+          <div className="stat-item glass-panel">
+            <span className="stat-label">MODULES</span>
             <span className="stat-value">{MODULES.length}</span>
           </div>
-          <div className="stat-card">
+          <div className="stat-item glass-panel">
             <span className="stat-label">ENDPOINTS</span>
             <span className="stat-value">{totalEndpoints}</span>
           </div>
-          <div className="stat-card">
-            <span className="stat-label">STATUS</span>
-            <span className="stat-value green">ONLINE</span>
+          <div className="stat-item glass-panel">
+            <span className="stat-label">LATENCY</span>
+            <span className="stat-value neon-green">{latency ? `${latency}ms` : 'Ready'}</span>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Filter / Search */}
-      <div className="search-box">
+      {/* Search Input Bar */}
+      <div className="search-wrapper">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" strokeWidth="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         <input
           type="text"
-          placeholder="SEARCH ENDPOINT / CATEGORY..."
+          placeholder="Type to filter endpoint or query..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
       </div>
 
-      {/* Modules List */}
-      {MODULES.map((m, idx) => {
+      {/* Category Filter Pills */}
+      <div className="filter-pills">
+        {['ALL', 'AI', 'DOWNLOAD', 'TOOLS'].map((tag) => (
+          <button
+            key={tag}
+            className={`filter-btn ${selectedTag === tag ? 'active' : ''}`}
+            onClick={() => setSelectedTag(tag)}
+          >
+            {tag}
+          </button>
+        ))}
+      </div>
+
+      {/* Endpoint Accordion Modules */}
+      {MODULES.filter((m) => selectedTag === 'ALL' || m.id === selectedTag).map((m, idx) => {
         const isOpen = openModule === m.id;
         const filteredEps = m.endpoints.filter(
           (e) =>
@@ -264,42 +271,39 @@ export default function App() {
         if (search && filteredEps.length === 0) return null;
 
         return (
-          <div key={m.id} className="module-card">
+          <div key={m.id} className="module-block glass-panel">
             <div className="module-header" onClick={() => setOpenModule(isOpen ? null : m.id)}>
-              <div className="module-info">
-                <span className="icon-diamond">◆</span>
+              <div className="module-meta">
+                <span className="module-icon">{m.icon}</span>
                 <div>
-                  <span className="module-tag">MODULE {String(idx + 1).padStart(2, '0')}</span>
+                  <span className="module-code">LAYER {String(idx + 1).padStart(2, '0')}</span>
                   <h3>{m.name}</h3>
-                  <span className="module-sub">{m.endpoints.length} ENDPOINTS</span>
                 </div>
               </div>
-              <span className="toggle-btn">{isOpen ? 'CLOSE ↑' : 'OPEN ↓'}</span>
+              <span className="module-badge">{filteredEps.length} EP {isOpen ? '▲' : '▼'}</span>
             </div>
 
             {isOpen && (
-              <div className="module-body">
-                <div className="path-label">
-                  PATH: <code>{m.path}</code>
-                </div>
-
+              <div className="module-content">
                 {filteredEps.map((ep) => {
                   const isSelected = activeEp?.path === ep.path;
                   return (
                     <div key={ep.path} className="endpoint-item">
                       <div className="endpoint-header" onClick={() => handleSelectEp(ep)}>
-                        <div className="endpoint-title">
-                          <span className="badge-get">{ep.method}</span>
-                          <span className="ep-name">{ep.name}</span>
-                          <span className="ep-path">{ep.path}</span>
+                        <div className="endpoint-left">
+                          <span className="method-tag">{ep.method}</span>
+                          <div>
+                            <div className="ep-title">{ep.name}</div>
+                            <div className="ep-route">{ep.path}</div>
+                          </div>
                         </div>
-                        <span className="expand-icon">{isSelected ? '−' : '+'}</span>
+                        <span style={{ color: 'var(--text-dim)' }}>{isSelected ? '✕' : '+'}</span>
                       </div>
 
                       {isSelected && (
-                        <form onSubmit={executeApi} className="playground-box">
+                        <form onSubmit={executeApi} className="ep-playground">
                           {ep.params.map((p) => (
-                            <div key={p.key} className="form-field">
+                            <div key={p.key} className="form-row">
                               <label>{p.key}</label>
                               {p.key === 'model' ? (
                                 <select
@@ -340,8 +344,8 @@ export default function App() {
                               )}
                             </div>
                           ))}
-                          <button type="submit" disabled={loading} className="btn-run">
-                            {loading ? 'EXECUTING...' : 'RUN REQUEST'}
+                          <button type="submit" disabled={loading} className="btn-glow-submit">
+                            {loading ? 'TRANSMITTING REQUEST...' : 'DISPATCH ENDPOINT →'}
                           </button>
                         </form>
                       )}
@@ -354,51 +358,24 @@ export default function App() {
         );
       })}
 
-      {/* Terminal View Response */}
+      {/* Terminal View Output */}
       {responseView && (
-        <div className="terminal-viewer">
+        <section className="terminal-viewer">
           <div className="terminal-header">
-            <span>JSON TERMINAL RESPONSE</span>
-            <div className="terminal-actions">
-              <button onClick={copyToClipboard} className="btn-copy">
+            <div className="term-badges">
+              <span>RESPONSE STREAM</span>
+              {latency && <span className="latency-tag">{latency}ms</span>}
+            </div>
+            <div style={{ display: 'flex', gap: '6px' }}>
+              <button onClick={copyToClipboard} className="btn-term-action">
                 {copied ? 'COPIED!' : 'COPY'}
               </button>
-              <button onClick={() => setResponseView(null)} className="btn-close-term">✕</button>
+              <button onClick={() => setResponseView(null)} className="btn-term-action">✕</button>
             </div>
           </div>
           <pre>{JSON.stringify(responseView, null, 2)}</pre>
-        </div>
+        </section>
       )}
-
-      {/* Persistent Vault / History */}
-      <div className="module-card">
-        <div className="module-header">
-          <div className="module-info">
-            <span className="icon-diamond red">◆</span>
-            <div>
-              <span className="module-tag">LOCAL DINSTORE</span>
-              <h3>Stored History</h3>
-              <span className="module-sub">{vault.length} ITEMS SAVED</span>
-            </div>
-          </div>
-          {vault.length > 0 && (
-            <button className="clear-btn" onClick={clearStorage}>WIPE</button>
-          )}
-        </div>
-        <div className="history-list">
-          {vault.length === 0 ? (
-            <div className="empty-hint">Belum ada response yang disimpan ke vault</div>
-          ) : (
-            vault.map((item) => (
-              <div key={item.id} className="history-item" onClick={() => setResponseView(item.data)}>
-                <span className="badge-get">SAVED</span>
-                <span className="h-name">{item.name}</span>
-                <span className="h-time">{item.time}</span>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
     </div>
   );
 }
