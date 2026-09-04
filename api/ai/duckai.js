@@ -1,70 +1,135 @@
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
-  
-  if (req.method === 'OPTIONS') {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
     return res.status(200).end();
   }
 
   if (req.method !== "GET") {
     return res.status(405).json({
-      creator: "DINSTORE",
-      source: "DuckAI — DINSTORE",
       status: false,
-      message: "Method not allowed"
+      creator: "DINSTORE",
+      message: "Method tidak diizinkan",
+      error: {
+        code: "METHOD_NOT_ALLOWED"
+      }
     });
   }
 
-  const { message = '', model = 'gpt-4o-mini', systemPrompt = 'You are a helpful assistant' } = req.query;
+  const {
+    message,
+    model = "gpt-4o-mini",
+    systemPrompt = "You are a helpful assistant"
+  } = req.query;
 
-  if (!message) {
+  // Validasi message
+  if (!message || !String(message).trim()) {
     return res.status(400).json({
-      creator: "DINSTORE",
-      source: "DuckAI — DINSTORE",
       status: false,
-      message: "Parameter message wajib diisi"
+      creator: "DINSTORE",
+      message: "Parameter message wajib diisi",
+      error: {
+        code: "MISSING_MESSAGE"
+      }
     });
   }
+
+  const params = new URLSearchParams({
+    message: String(message),
+    model: String(model),
+    systemPrompt: String(systemPrompt)
+  });
+
+  const providerUrl =
+    `https://api.siputzx.my.id/api/ai/duckai?${params.toString()}`;
 
   try {
-    const target = new URL("https://api.siputzx.my.id/api/ai/duckai");
-    target.searchParams.set("message", message);
-    target.searchParams.set("model", model);
-    target.searchParams.set("systemPrompt", systemPrompt);
+    const response = await fetch(providerUrl, {
+      method: "GET",
+      headers: {
+        Accept: "application/json"
+      }
+    });
 
-    const response = await fetch(target.toString());
-    const text = await response.text();
+    let result;
 
-    let data;
     try {
-      data = JSON.parse(text);
+      result = await response.json();
     } catch {
-      data = { data: text };
+      return res.status(502).json({
+        status: false,
+        creator: "DINSTORE",
+        message: "Provider mengembalikan response yang tidak valid",
+        error: {
+          code: "INVALID_PROVIDER_RESPONSE"
+        }
+      });
     }
 
-    const isSuccess = response.ok && (data.status === true || data.status === "true");
-    const rawResult = data.result ?? data.data ?? data;
+    /*
+     * Provider HTTP error
+     */
+    if (!response.ok) {
+      return res.status(502).json({
+        status: false,
+        creator: "DINSTORE",
+        message: "Layanan AI sedang mengalami gangguan",
+        error: {
+          code: "PROVIDER_ERROR",
+          status: response.status
+        }
+      });
+    }
 
-    // Bersihkan atribut pihak ketiga jika ada di dalam result
-    let cleanedResult = typeof rawResult === 'object' && rawResult !== null ? { ...rawResult } : { data: rawResult };
-    delete cleanedResult.creator;
-    delete cleanedResult.source;
+    /*
+     * Provider mengembalikan status false
+     */
+    if (result?.status === false) {
+      return res.status(502).json({
+        status: false,
+        creator: "DINSTORE",
+        message: "Layanan AI gagal memproses permintaan",
+        error: {
+          code: "AI_PROCESSING_ERROR"
+        }
+      });
+    }
 
-    return res.status(response.status).json({
+    /*
+     * Ambil data provider
+     */
+    const providerData = result?.data || {};
+
+    /*
+     * Response resmi DINSTORE
+     */
+    return res.status(200).json({
+      status: true,
       creator: "DINSTORE",
-      source: "DuckAI — DINSTORE",
-      status: isSuccess,
-      result: cleanedResult
+      data: {
+        message: providerData.message ?? "",
+        model: providerData.model ?? model,
+        metadata: providerData.metadata ?? null
+      },
+      timestamp: new Date().toISOString()
     });
 
   } catch (error) {
-    console.error(error);
+    /*
+     * Semua error internal disembunyikan
+     */
+    console.error("DINSTORE DuckAI Error:", error);
 
     return res.status(500).json({
-      creator: "DINSTORE",
-      source: "DuckAI — DINSTORE",
       status: false,
-      message: "Gagal menghubungi provider"
+      creator: "DINSTORE",
+      message: "Terjadi kesalahan pada server DINSTORE",
+      error: {
+        code: "INTERNAL_SERVER_ERROR"
+      },
+      timestamp: new Date().toISOString()
     });
   }
 }
