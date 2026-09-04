@@ -2,123 +2,113 @@ import { useState } from 'react';
 
 const MODULES = [
   {
+    id: 'DOWNLOAD',
+    name: 'DOWNLOADER',
+    path: '/api/d',
+    endpoints: [
+      {
+        name: 'CapCut Downloader',
+        path: '/api/download/capcut',
+        method: 'GET',
+        desc: 'Retrieve comprehensive metadata for a CapCut video by providing its URL.',
+        params: [{ key: 'url', label: 'URL', required: true, default: 'https://www.capcut.com/' }]
+      },
+      {
+        name: 'TikTok Downloader',
+        path: '/api/download/tiktok',
+        method: 'GET',
+        desc: 'Extract media and metadata from TikTok links without watermark.',
+        params: [{ key: 'url', label: 'URL', required: true, default: 'https://vt.tiktok.com/' }]
+      },
+      {
+        name: 'Instagram Downloader',
+        path: '/api/download/instagram',
+        method: 'GET',
+        desc: 'Fetch Reels, posts, and carousel content from Instagram.',
+        params: [{ key: 'url', label: 'URL', required: true, default: 'https://www.instagram.com/p/' }]
+      },
+      {
+        name: 'DramaBox Downloader',
+        path: '/api/download/dramabox',
+        method: 'GET',
+        desc: 'Retrieve DramaBox video stream details.',
+        params: [{ key: 'url', label: 'URL', required: true, default: '' }]
+      }
+    ]
+  },
+  {
     id: 'AI',
-    name: 'Artificial Intelligence',
+    name: 'ARTIFICIAL INTELLIGENCE',
     path: '/api/ai',
-    icon: '◆',
     endpoints: [
       {
         name: 'AI Duckai',
         path: '/api/ai/duckai',
         method: 'GET',
-        desc: 'Multi-model inference engine',
+        desc: 'Multi-model artificial intelligence query engine.',
         params: [
-          { key: 'message', default: 'What is the meaning of life?' },
-          { key: 'model', default: 'gpt-4o-mini' },
-          { key: 'systemPrompt', default: 'You are a helpful assistant' }
+          { key: 'message', label: 'MESSAGE', required: true, default: 'What is the meaning of life?' },
+          { key: 'model', label: 'MODEL', required: false, default: 'gpt-4o-mini' },
+          { key: 'systemPrompt', label: 'SYSTEM PROMPT', required: false, default: 'You are a helpful assistant' }
         ]
       },
       {
         name: 'Bible AI',
         path: '/api/ai/bibleai',
         method: 'GET',
-        desc: 'Theology and scripture explorer',
+        desc: 'Explore theological and scripture references.',
         params: [
-          { key: 'question', default: 'What is faith?' },
-          { key: 'translation', default: 'ESV' }
+          { key: 'question', label: 'QUESTION', required: true, default: 'What is faith?' },
+          { key: 'translation', label: 'TRANSLATION', required: false, default: 'ESV' }
         ]
       },
       {
         name: 'Flixier AI Image',
         path: '/api/ai/flixier',
         method: 'GET',
-        desc: 'Text to high-res visual render',
-        params: [{ key: 'prompt', default: 'futuristic neon cyber city' }]
+        desc: 'Generate visual artwork from text prompts.',
+        params: [{ key: 'prompt', label: 'PROMPT', required: true, default: 'futuristic neon cyber city' }]
       },
       {
         name: 'AI Lyrics Generator',
         path: '/api/ai/lyricsgen',
         method: 'GET',
-        desc: 'Structured song & poem generator',
-        params: [{ key: 'title', default: 'Cyberpunk night' }]
-      },
-      {
-        name: 'AI Chat 4',
-        path: '/api/ai/ai4chat',
-        method: 'GET',
-        desc: 'Conversational assistant bot',
-        params: [{ key: 'message', default: 'Hello AI' }]
-      }
-    ]
-  },
-  {
-    id: 'DOWNLOAD',
-    name: 'Media Extractor',
-    path: '/api/download',
-    icon: '▼',
-    endpoints: [
-      {
-        name: 'TikTok Downloader',
-        path: '/api/download/tiktok',
-        method: 'GET',
-        desc: 'No-watermark video fetcher',
-        params: [{ key: 'url', default: 'https://vt.tiktok.com/' }]
-      },
-      {
-        name: 'Instagram Media',
-        path: '/api/download/instagram',
-        method: 'GET',
-        desc: 'Reel, post & image scraper',
-        params: [{ key: 'url', default: 'https://www.instagram.com/p/' }]
-      },
-      {
-        name: 'CapCut Video',
-        path: '/api/download/capcut',
-        method: 'GET',
-        desc: 'Direct template video download',
-        params: [{ key: 'url', default: 'https://www.capcut.com/' }]
-      },
-      {
-        name: 'DramaBox Stream',
-        path: '/api/download/dramabox',
-        method: 'GET',
-        desc: 'Short-film drama extractor',
-        params: [{ key: 'url', default: '' }]
+        desc: 'Produce musical lyrics and song structures.',
+        params: [{ key: 'title', label: 'TITLE', required: true, default: 'Cyberpunk night' }]
       }
     ]
   },
   {
     id: 'TOOLS',
-    name: 'Utilities & News',
+    name: 'TOOLS & UTILITIES',
     path: '/api/tools',
-    icon: '⚡',
     endpoints: [
       {
-        name: 'AI Code Solver',
+        name: 'AI Coder',
         path: '/api/tools/aicoder',
         method: 'GET',
-        desc: 'Algorithm & bug refactor engine',
-        params: [{ key: 'text', default: 'binary search tree python' }]
+        desc: 'Code generation and debugging engine.',
+        params: [{ key: 'text', label: 'PROMPT TEXT', required: true, default: 'binary search tree in python' }]
       },
       {
         name: 'Checker Ban WA',
         path: '/api/tools/checker-ban-wa',
         method: 'GET',
-        desc: 'WhatsApp account status inspector',
-        params: [{ key: 'number', default: '628123456789' }]
+        desc: 'Inspect WhatsApp number ban status.',
+        params: [{ key: 'number', label: 'PHONE NUMBER', required: true, default: '628123456789' }]
       },
       {
-        name: 'Domain Inspector',
+        name: 'Domain Info',
         path: '/api/tools/domaininfo',
         method: 'GET',
-        desc: 'WHOIS & DNS records query',
-        params: [{ key: 'domain', default: 'google.com' }]
+        desc: 'Look up WHOIS and domain records.',
+        params: [{ key: 'domain', label: 'DOMAIN NAME', required: true, default: 'google.com' }]
       },
       {
-        name: 'Detik Live News',
+        name: 'Detik News',
         path: '/api/news/detik',
         method: 'GET',
-        desc: 'Real-time Indonesian news feed',
+        desc: 'Get the latest real-time headlines from Detik.',
         params: []
       }
     ]
@@ -126,256 +116,323 @@ const MODULES = [
 ];
 
 export default function App() {
-  const [search, setSearch] = useState('');
-  const [selectedTag, setSelectedTag] = useState('ALL');
-  const [openModule, setOpenModule] = useState('AI');
-  const [activeEp, setActiveEp] = useState(null);
-  const [formParams, setFormParams] = useState({});
-  const [responseView, setResponseView] = useState(null);
-  const [latency, setLatency] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [copied, setCopied] = useState(false);
+  const [filterText, setFilterText] = useState('');
+  const [activeEpPath, setActiveEpPath] = useState('/api/download/capcut');
+  const [formInputs, setFormInputs] = useState({
+    '/api/download/capcut': { url: 'https://www.capcut.com/' }
+  });
+  const [executionState, setExecutionState] = useState({});
+  const [activeViewTab, setActiveViewTab] = useState('PREVIEW');
+  const [copyStatus, setCopyStatus] = useState(false);
 
-  const totalEndpoints = MODULES.reduce((acc, curr) => acc + curr.endpoints.length, 0);
-
-  const handleSelectEp = (ep) => {
-    if (activeEp?.path === ep.path) {
-      setActiveEp(null);
-      return;
+  const toggleEndpoint = (ep) => {
+    if (activeEpPath === ep.path) {
+      setActiveEpPath(null);
+    } else {
+      setActiveEpPath(ep.path);
+      if (!formInputs[ep.path]) {
+        const initial = {};
+        ep.params.forEach((p) => {
+          initial[p.key] = p.default;
+        });
+        setFormInputs((prev) => ({ ...prev, [ep.path]: initial }));
+      }
     }
-    setActiveEp(ep);
-    const initial = {};
+  };
+
+  const handleInputChange = (path, key, value) => {
+    setFormInputs((prev) => ({
+      ...prev,
+      [path]: {
+        ...(prev[path] || {}),
+        [key]: value
+      }
+    }));
+  };
+
+  const handleClear = (ep) => {
+    const cleared = {};
     ep.params.forEach((p) => {
-      initial[p.key] = p.default;
+      cleared[p.key] = '';
     });
-    setFormParams(initial);
+    setFormInputs((prev) => ({ ...prev, [ep.path]: cleared }));
   };
 
-  const handleParamChange = (key, val) => {
-    setFormParams((prev) => ({ ...prev, [key]: val }));
-  };
-
-  const executeApi = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    const startTime = performance.now();
-
+  const handleExecute = async (ep) => {
+    const currentParams = formInputs[ep.path] || {};
     const queryParams = new URLSearchParams();
-    Object.entries(formParams).forEach(([k, v]) => {
+    Object.entries(currentParams).forEach(([k, v]) => {
       if (v !== undefined && v !== '') queryParams.append(k, v);
     });
 
     const queryString = queryParams.toString();
-    const targetUrl = `${activeEp.path}${queryString ? '?' + queryString : ''}`;
+    const targetUrl = `${ep.path}${queryString ? '?' + queryString : ''}`;
+
+    setExecutionState((prev) => ({
+      ...prev,
+      [ep.path]: { ...prev[ep.path], loading: true }
+    }));
+
+    const startTime = performance.now();
 
     try {
       const res = await fetch(targetUrl);
       const data = await res.json();
       const endTime = performance.now();
-      
-      setLatency(Math.round(endTime - startTime));
-      setResponseView(data);
+
+      setExecutionState((prev) => ({
+        ...prev,
+        [ep.path]: {
+          loading: false,
+          status: res.status,
+          latency: Math.round(endTime - startTime),
+          url: targetUrl,
+          headers: {
+            'content-type': res.headers.get('content-type') || 'application/json',
+            status: `${res.status} ${res.statusText || 'OK'}`
+          },
+          data
+        }
+      }));
     } catch (err) {
-      setResponseView({ status: false, error: err.message });
-      setLatency(null);
-    } finally {
-      setLoading(false);
+      const endTime = performance.now();
+      setExecutionState((prev) => ({
+        ...prev,
+        [ep.path]: {
+          loading: false,
+          status: 500,
+          latency: Math.round(endTime - startTime),
+          url: targetUrl,
+          headers: { 'content-type': 'application/json' },
+          data: { status: false, error: err.message }
+        }
+      }));
     }
   };
 
-  const copyToClipboard = () => {
-    if (!responseView) return;
-    navigator.clipboard.writeText(JSON.stringify(responseView, null, 2));
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1500);
+  const handleCopyJson = (data) => {
+    if (!data) return;
+    navigator.clipboard.writeText(JSON.stringify(data, null, 2));
+    setCopyStatus(true);
+    setTimeout(() => setCopyStatus(false), 1500);
   };
 
   return (
-    <div className="container">
-      {/* Top Navbar */}
-      <header className="navbar glass-panel">
-        <div className="brand">
-          <div className="avatar">D</div>
-          <div>
-            <div className="brand-title">DINSTORE</div>
-            <div className="brand-sub">ENGINE 3.0.0</div>
-          </div>
+    <div className="layout-root">
+      {/* Navbar Bar */}
+      <header className="top-navbar">
+        <div className="nav-brand">
+          <span className="brand-stripe"></span>
+          <span className="brand-text">API SIPUTZX</span>
         </div>
-        <div className="online-badge">
-          <span className="pulse-dot"></span> CONNECTED
+        <div className="nav-actions">
+          <button className="icon-btn" title="Toggle theme">☼</button>
+          <button className="icon-btn" title="Menu">≡</button>
         </div>
       </header>
 
-      {/* Hero Terminal Card */}
-      <section className="hero">
-        <div className="terminal-pill">
-          <span>●</span> CLOUD GATEWAY ACTIVE
-        </div>
-        <h1 className="hero-title">
-          DINSTORE <span className="glow-version">v3.0.0</span>
-        </h1>
-        <p className="hero-desc">
-          High-performance unified API portal and developer testing environment.
-        </p>
-
-        {/* Counter Stats */}
-        <div className="stats-grid">
-          <div className="stat-item glass-panel">
-            <span className="stat-label">MODULES</span>
-            <span className="stat-value">{MODULES.length}</span>
-          </div>
-          <div className="stat-item glass-panel">
-            <span className="stat-label">ENDPOINTS</span>
-            <span className="stat-value">{totalEndpoints}</span>
-          </div>
-          <div className="stat-item glass-panel">
-            <span className="stat-label">LATENCY</span>
-            <span className="stat-value neon-green">{latency ? `${latency}ms` : 'Ready'}</span>
-          </div>
-        </div>
-      </section>
-
-      {/* Search Input Bar */}
-      <div className="search-wrapper">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" strokeWidth="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      {/* Filter Bar */}
+      <div className="filter-container">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#71717a" strokeWidth="2.5">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg>
         <input
           type="text"
-          placeholder="Type to filter endpoint or query..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          placeholder="FILTER ENDPOINTS..."
+          value={filterText}
+          onChange={(e) => setFilterText(e.target.value)}
         />
       </div>
 
-      {/* Category Filter Pills */}
-      <div className="filter-pills">
-        {['ALL', 'AI', 'DOWNLOAD', 'TOOLS'].map((tag) => (
-          <button
-            key={tag}
-            className={`filter-btn ${selectedTag === tag ? 'active' : ''}`}
-            onClick={() => setSelectedTag(tag)}
-          >
-            {tag}
-          </button>
-        ))}
-      </div>
+      {/* Accordion Categories & Endpoints */}
+      <main className="endpoint-stream">
+        {MODULES.map((module) => {
+          const filteredEndpoints = module.endpoints.filter((ep) =>
+            ep.name.toLowerCase().includes(filterText.toLowerCase()) ||
+            ep.path.toLowerCase().includes(filterText.toLowerCase())
+          );
 
-      {/* Endpoint Accordion Modules */}
-      {MODULES.filter((m) => selectedTag === 'ALL' || m.id === selectedTag).map((m, idx) => {
-        const isOpen = openModule === m.id;
-        const filteredEps = m.endpoints.filter(
-          (e) =>
-            e.name.toLowerCase().includes(search.toLowerCase()) ||
-            e.path.toLowerCase().includes(search.toLowerCase())
-        );
+          if (filterText && filteredEndpoints.length === 0) return null;
 
-        if (search && filteredEps.length === 0) return null;
-
-        return (
-          <div key={m.id} className="module-block glass-panel">
-            <div className="module-header" onClick={() => setOpenModule(isOpen ? null : m.id)}>
-              <div className="module-meta">
-                <span className="module-icon">{m.icon}</span>
-                <div>
-                  <span className="module-code">LAYER {String(idx + 1).padStart(2, '0')}</span>
-                  <h3>{m.name}</h3>
-                </div>
+          return (
+            <section key={module.id} className="module-group">
+              <div className="module-legend">
+                <span>{module.name}</span>
+                <span className="endpoint-count">{filteredEndpoints.length} ENDPOINTS</span>
               </div>
-              <span className="module-badge">{filteredEps.length} EP {isOpen ? '▲' : '▼'}</span>
-            </div>
 
-            {isOpen && (
-              <div className="module-content">
-                {filteredEps.map((ep) => {
-                  const isSelected = activeEp?.path === ep.path;
+              <div className="endpoint-list">
+                {filteredEndpoints.map((ep) => {
+                  const isOpen = activeEpPath === ep.path;
+                  const exec = executionState[ep.path] || {};
+                  const currentVals = formInputs[ep.path] || {};
+
                   return (
-                    <div key={ep.path} className="endpoint-item">
-                      <div className="endpoint-header" onClick={() => handleSelectEp(ep)}>
-                        <div className="endpoint-left">
-                          <span className="method-tag">{ep.method}</span>
-                          <div>
-                            <div className="ep-title">{ep.name}</div>
-                            <div className="ep-route">{ep.path}</div>
-                          </div>
+                    <div key={ep.path} className={`endpoint-card ${isOpen ? 'active' : ''}`}>
+                      {/* Accordion Row */}
+                      <div className="endpoint-row" onClick={() => toggleEndpoint(ep)}>
+                        <div className="endpoint-meta">
+                          <span className="http-badge-get">{ep.method}</span>
+                          <span className="endpoint-route">{ep.path}</span>
+                          <span className="endpoint-alias">{ep.name}</span>
                         </div>
-                        <span style={{ color: 'var(--text-dim)' }}>{isSelected ? '✕' : '+'}</span>
+                        <span className="accordion-arrow">{isOpen ? '˄' : '˅'}</span>
                       </div>
 
-                      {isSelected && (
-                        <form onSubmit={executeApi} className="ep-playground">
-                          {ep.params.map((p) => (
-                            <div key={p.key} className="form-row">
-                              <label>{p.key}</label>
-                              {p.key === 'model' ? (
-                                <select
-                                  value={formParams[p.key] || 'gpt-4o-mini'}
-                                  onChange={(e) => handleParamChange(p.key, e.target.value)}
-                                >
-                                  <option value="gpt-4o-mini">gpt-4o-mini</option>
-                                  <option value="claude-3-5-haiku-latest">claude-3-5-haiku-latest</option>
-                                  <option value="meta-llama/Llama-4-Scout-17B-16E-Instruct">meta-llama/Llama-4-Scout-17B-16E-Instruct</option>
-                                  <option value="mistralai/Mistral-Small-24B-Instruct-2501">mistralai/Mistral-Small-24B-Instruct-2501</option>
-                                  <option value="openai/gpt-oss-120b">openai/gpt-oss-120b</option>
-                                  <option value="gpt-5-mini">gpt-5-mini</option>
-                                </select>
-                              ) : p.key === 'translation' ? (
-                                <select
-                                  value={formParams[p.key] || 'ESV'}
-                                  onChange={(e) => handleParamChange(p.key, e.target.value)}
-                                >
-                                  <option value="ESV">ESV (English Standard Version)</option>
-                                  <option value="NIV">NIV (New International Version)</option>
-                                  <option value="KJV">KJV (King James Version)</option>
-                                  <option value="TB">TB (Terjemahan Baru)</option>
-                                </select>
-                              ) : p.key === 'message' || p.key === 'question' || p.key === 'prompt' || p.key === 'text' ? (
-                                <textarea
-                                  rows="2"
-                                  value={formParams[p.key] || ''}
-                                  onChange={(e) => handleParamChange(p.key, e.target.value)}
-                                  required
-                                />
-                              ) : (
-                                <input
-                                  type="text"
-                                  value={formParams[p.key] || ''}
-                                  onChange={(e) => handleParamChange(p.key, e.target.value)}
-                                  required={p.key === 'url' || p.key === 'number' || p.key === 'domain'}
-                                />
-                              )}
+                      {/* Playground Content & Embedded Response Box */}
+                      {isOpen && (
+                        <div className="playground-drawer">
+                          {ep.desc && <p className="endpoint-desc">{ep.desc}</p>}
+
+                          <div className="method-selector">
+                            <span className="method-pill active">GET</span>
+                            <span className="method-pill disabled">POST</span>
+                          </div>
+
+                          {ep.params.length > 0 && (
+                            <div className="params-wrapper">
+                              <div className="params-headline">REQUEST PARAMETERS</div>
+
+                              {ep.params.map((p) => (
+                                <div key={p.key} className="input-group">
+                                  <label>
+                                    {p.label || p.key} {p.required && <span className="req-star">*</span>}
+                                  </label>
+
+                                  {p.key === 'model' ? (
+                                    <select
+                                      value={currentVals[p.key] ?? p.default}
+                                      onChange={(e) => handleInputChange(ep.path, p.key, e.target.value)}
+                                    >
+                                      <option value="gpt-4o-mini">gpt-4o-mini</option>
+                                      <option value="claude-3-5-haiku-latest">claude-3-5-haiku-latest</option>
+                                      <option value="meta-llama/Llama-4-Scout-17B-16E-Instruct">meta-llama/Llama-4-Scout-17B-16E-Instruct</option>
+                                      <option value="mistralai/Mistral-Small-24B-Instruct-2501">mistralai/Mistral-Small-24B-Instruct-2501</option>
+                                      <option value="openai/gpt-oss-120b">openai/gpt-oss-120b</option>
+                                      <option value="gpt-5-mini">gpt-5-mini</option>
+                                    </select>
+                                  ) : p.key === 'translation' ? (
+                                    <select
+                                      value={currentVals[p.key] ?? p.default}
+                                      onChange={(e) => handleInputChange(ep.path, p.key, e.target.value)}
+                                    >
+                                      <option value="ESV">ESV</option>
+                                      <option value="NIV">NIV</option>
+                                      <option value="KJV">KJV</option>
+                                      <option value="TB">TB</option>
+                                    </select>
+                                  ) : (
+                                    <input
+                                      type="text"
+                                      value={currentVals[p.key] ?? ''}
+                                      placeholder={p.default}
+                                      onChange={(e) => handleInputChange(ep.path, p.key, e.target.value)}
+                                    />
+                                  )}
+                                </div>
+                              ))}
                             </div>
-                          ))}
-                          <button type="submit" disabled={loading} className="btn-glow-submit">
-                            {loading ? 'TRANSMITTING REQUEST...' : 'DISPATCH ENDPOINT →'}
+                          )}
+
+                          {/* Action Buttons */}
+                          <button
+                            type="button"
+                            className="btn-execute"
+                            disabled={exec.loading}
+                            onClick={() => handleExecute(ep)}
+                          >
+                            {exec.loading ? 'FETCHING...' : 'EXECUTE REQUEST'}
                           </button>
-                        </form>
+
+                          <button
+                            type="button"
+                            className="btn-clear"
+                            onClick={() => handleClear(ep)}
+                          >
+                            CLEAR
+                          </button>
+
+                          {/* Inline Response Box */}
+                          {exec.data && (
+                            <div className="terminal-result-block">
+                              <div className="terminal-result-header">
+                                <div className="result-tabs">
+                                  <button
+                                    className={`tab-link ${activeViewTab === 'PREVIEW' ? 'active' : ''}`}
+                                    onClick={() => setActiveViewTab('PREVIEW')}
+                                  >
+                                    PREVIEW
+                                  </button>
+                                  <button
+                                    className={`tab-link ${activeViewTab === 'HEADERS' ? 'active' : ''}`}
+                                    onClick={() => setActiveViewTab('HEADERS')}
+                                  >
+                                    HEADERS
+                                  </button>
+                                  <button
+                                    className={`tab-link ${activeViewTab === 'CURL' ? 'active' : ''}`}
+                                    onClick={() => setActiveViewTab('CURL')}
+                                  >
+                                    CURL
+                                  </button>
+                                </div>
+
+                                <div className="result-badges">
+                                  {/* Copy Icon Button */}
+                                  <button
+                                    className="btn-icon-copy"
+                                    title="Copy JSON Response"
+                                    onClick={() => handleCopyJson(exec.data)}
+                                  >
+                                    {copyStatus ? (
+                                      <span className="copied-text">✓</span>
+                                    ) : (
+                                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                      </svg>
+                                    )}
+                                  </button>
+
+                                  <span className={`status-pill ${exec.status === 200 ? 'status-200' : 'status-err'}`}>
+                                    {exec.status} {exec.status === 200 ? 'OK' : 'ERR'}
+                                  </span>
+                                  {exec.latency && (
+                                    <span className="latency-text">{exec.latency}ms</span>
+                                  )}
+                                </div>
+                              </div>
+
+                              <div className="terminal-result-body">
+                                {activeViewTab === 'PREVIEW' && (
+                                  <pre className="code-green">
+                                    {JSON.stringify(exec.data, null, 2)}
+                                  </pre>
+                                )}
+                                {activeViewTab === 'HEADERS' && (
+                                  <pre className="code-cyan">
+                                    {JSON.stringify(exec.headers, null, 2)}
+                                  </pre>
+                                )}
+                                {activeViewTab === 'CURL' && (
+                                  <pre className="code-yellow">
+                                    {`curl -X GET "${window.location.origin}${exec.url}"`}
+                                  </pre>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       )}
                     </div>
                   );
                 })}
               </div>
-            )}
-          </div>
-        );
-      })}
-
-      {/* Terminal View Output */}
-      {responseView && (
-        <section className="terminal-viewer">
-          <div className="terminal-header">
-            <div className="term-badges">
-              <span>RESPONSE STREAM</span>
-              {latency && <span className="latency-tag">{latency}ms</span>}
-            </div>
-            <div style={{ display: 'flex', gap: '6px' }}>
-              <button onClick={copyToClipboard} className="btn-term-action">
-                {copied ? 'COPIED!' : 'COPY'}
-              </button>
-              <button onClick={() => setResponseView(null)} className="btn-term-action">✕</button>
-            </div>
-          </div>
-          <pre>{JSON.stringify(responseView, null, 2)}</pre>
-        </section>
-      )}
+            </section>
+          );
+        })}
+      </main>
     </div>
   );
 }
