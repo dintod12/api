@@ -2,8 +2,42 @@ import { useState } from 'react';
 
 const MODULES = [
   {
+    id: 'DOWNLOAD',
+    name: 'MEDIA DOWNLOADER',
+    endpoints: [
+      {
+        name: 'CapCut Video',
+        path: '/api/download/capcut',
+        method: 'GET',
+        desc: 'Download template dan video CapCut tanpa ribet.',
+        params: [{ key: 'url', label: 'URL', required: true, default: 'https://www.capcut.com/' }]
+      },
+      {
+        name: 'TikTok Video',
+        path: '/api/download/tiktok',
+        method: 'GET',
+        desc: 'Download video TikTok tanpa watermark secara cepat.',
+        params: [{ key: 'url', label: 'URL', required: true, default: 'https://vt.tiktok.com/' }]
+      },
+      {
+        name: 'Instagram Media',
+        path: '/api/download/instagram',
+        method: 'GET',
+        desc: 'Unduh reels, video, dan postingan Instagram.',
+        params: [{ key: 'url', label: 'URL', required: true, default: 'https://www.instagram.com/p/' }]
+      },
+      {
+        name: 'DramaBox Stream',
+        path: '/api/download/dramabox',
+        method: 'GET',
+        desc: 'Ekstrak video streaming dari DramaBox.',
+        params: [{ key: 'url', label: 'URL', required: true, default: '' }]
+      }
+    ]
+  },
+  {
     id: 'AI',
-    name: 'AI MODULE',
+    name: 'ARTIFICIAL INTELLIGENCE',
     endpoints: [
       {
         name: 'AI Duckai',
@@ -20,7 +54,7 @@ const MODULES = [
         name: 'Bible AI',
         path: '/api/ai/bibleai',
         method: 'GET',
-        desc: 'Explore theological and scripture references.',
+        desc: 'Eksplorasi teologi dan referensi kitab suci.',
         params: [
           { key: 'question', label: 'QUESTION', required: true, default: 'What is faith?' },
           { key: 'translation', label: 'TRANSLATION', required: false, default: 'ESV' }
@@ -30,89 +64,55 @@ const MODULES = [
         name: 'Flixier AI Image',
         path: '/api/ai/flixier',
         method: 'GET',
-        desc: 'Render artwork matrices via text prompt.',
-        params: [{ key: 'prompt', label: 'PROMPT', required: true, default: 'transformer mecha cyber robot' }]
+        desc: 'Render gambar artistik melalui perintah teks.',
+        params: [{ key: 'prompt', label: 'PROMPT', required: true, default: 'cyberpunk neon futuristic city' }]
       },
       {
         name: 'AI Lyrics Generator',
         path: '/api/ai/lyricsgen',
         method: 'GET',
-        desc: 'Generate lyrics and rhythmic poems.',
+        desc: 'Buat lirik lagu secara otomatis dan kreatif.',
         params: [{ key: 'title', label: 'TITLE', required: true, default: 'Cyberpunk night' }]
       },
       {
         name: 'AI Chat (ai4chat)',
         path: '/api/ai/ai4chat',
         method: 'GET',
-        desc: 'Direct conversation AI interface.',
+        desc: 'Asisten obrolan interaktif.',
         params: [{ key: 'message', label: 'MESSAGE', required: true, default: 'Hello AI' }]
       }
     ]
   },
   {
-    id: 'DOWNLOAD',
-    name: 'DOWNLOADER MODULE',
-    endpoints: [
-      {
-        name: 'CapCut Video',
-        path: '/api/download/capcut',
-        method: 'GET',
-        desc: 'Retrieve comprehensive metadata for a CapCut video by providing its URL.',
-        params: [{ key: 'url', label: 'URL', required: true, default: 'https://www.capcut.com/' }]
-      },
-      {
-        name: 'TikTok Video',
-        path: '/api/download/tiktok',
-        method: 'GET',
-        desc: 'Download media without watermark from TikTok.',
-        params: [{ key: 'url', label: 'URL', required: true, default: 'https://vt.tiktok.com/' }]
-      },
-      {
-        name: 'Instagram Media',
-        path: '/api/download/instagram',
-        method: 'GET',
-        desc: 'Scrape Instagram video, reel, and image content.',
-        params: [{ key: 'url', label: 'URL', required: true, default: 'https://www.instagram.com/p/' }]
-      },
-      {
-        name: 'DramaBox Video',
-        path: '/api/download/dramabox',
-        method: 'GET',
-        desc: 'Extract DramaBox stream details.',
-        params: [{ key: 'url', label: 'URL', required: true, default: '' }]
-      }
-    ]
-  },
-  {
     id: 'TOOLS',
-    name: 'TOOLS & NEWS MODULE',
+    name: 'TOOLS & UTILITIES',
     endpoints: [
       {
         name: 'AI Coder',
         path: '/api/tools/aicoder',
         method: 'GET',
-        desc: 'Algorithm code solver and debugger.',
+        desc: 'Penyelesai kode pemrograman dan debugger cerdas.',
         params: [{ key: 'text', label: 'TEXT', required: true, default: 'binary search tree in python' }]
       },
       {
         name: 'Checker Ban WA',
         path: '/api/tools/checker-ban-wa',
         method: 'GET',
-        desc: 'Verify if a WhatsApp number is banned or active.',
+        desc: 'Periksa status blokir atau aktif nomor WhatsApp.',
         params: [{ key: 'number', label: 'PHONE NUMBER', required: true, default: '628123456789' }]
       },
       {
         name: 'Domain Info',
         path: '/api/tools/domaininfo',
         method: 'GET',
-        desc: 'WHOIS and DNS domain records inquiry.',
+        desc: 'Cek informasi DNS dan rekaman WHOIS domain.',
         params: [{ key: 'domain', label: 'DOMAIN', required: true, default: 'google.com' }]
       },
       {
         name: 'Detik News',
         path: '/api/news/detik',
         method: 'GET',
-        desc: 'Latest breaking headlines from Detikcom.',
+        desc: 'Berita aktual pilihan dari portal Detik.',
         params: []
       }
     ]
@@ -121,9 +121,9 @@ const MODULES = [
 
 export default function App() {
   const [filter, setFilter] = useState('');
-  const [activeEp, setActiveEp] = useState('/api/ai/duckai');
+  const [activeEp, setActiveEp] = useState('/api/download/capcut');
   const [inputs, setInputs] = useState({
-    '/api/ai/duckai': { message: 'What is the meaning of life?' }
+    '/api/download/capcut': { url: 'https://www.capcut.com/' }
   });
   const [runs, setRuns] = useState({});
   const [activeTab, setActiveTab] = useState('PREVIEW');
@@ -211,26 +211,54 @@ export default function App() {
   return (
     <div className="app-shell">
       <div className="main-viewport">
-        {/* Navbar */}
+        {/* Navbar ala Sidownload */}
         <header className="header-bar">
           <div className="brand-group">
-            <span className="brand-dot"></span>
-            <span className="brand-title">API SIPUTZX // DINSTORE</span>
+            <div className="brand-logo-box">S</div>
+            <div className="brand-texts">
+              <span className="brand-title">SIDOWNLOAD</span>
+              <span className="brand-subtitle">FAST • SIMPLE • FREE</span>
+            </div>
           </div>
-          <div className="status-pill">
-            <span className="live-spark"></span> ONLINE
-          </div>
+          <a href="#endpoints-section" className="doc-btn">
+            DOC ↗
+          </a>
         </header>
 
-        {/* Filter */}
-        <div className="filter-block">
+        {/* Hero Section ala Gambar */}
+        <section className="hero-section">
+          <div className="hero-badge">
+            <span className="live-spark"></span> MEDIA DOWNLOADER
+          </div>
+          <h1 className="hero-headline">
+            Download Video <br />
+            & Audio <span className="highlight-green">Tanpa Ribet</span>
+          </h1>
+          <p className="hero-desc">
+            Download media favorit kamu dengan cepat, sederhana, dan gratis.
+          </p>
+
+          {/* Floating Icon Badges Preview */}
+          <div className="hero-preview-cluster">
+            <div className="preview-bubble tiktok">🎵</div>
+            <div className="preview-phone-mockup">
+              <div className="mockup-top">SIDOWNLOAD</div>
+              <div className="mockup-play-btn">▶</div>
+            </div>
+            <div className="preview-bubble ig">📸</div>
+            <div className="preview-bubble spot">🟢</div>
+          </div>
+        </section>
+
+        {/* Filter / Search Endpoint */}
+        <div id="endpoints-section" className="filter-block">
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#71717a" strokeWidth="2.5">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
           <input
             type="text"
-            placeholder="FILTER ENDPOINTS..."
+            placeholder="CARI ENDPOINT API..."
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
           />
@@ -328,7 +356,7 @@ export default function App() {
                               disabled={r.loading}
                               onClick={() => execute(ep)}
                             >
-                              {r.loading ? 'COMPUTING STREAM...' : 'EXECUTE REQUEST'}
+                              {r.loading ? 'PROSES DOWNLOAD...' : 'EXECUTE REQUEST'}
                             </button>
 
                             {/* Response Box Tepat di Bawah Endpoint */}
