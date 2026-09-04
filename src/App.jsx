@@ -1,43 +1,11 @@
 import { useState } from 'react';
 
+// Daftar 13 Modul lengkap sesuai referensi tangkapan layar
 const MODULES = [
   {
-    id: 'DOWNLOAD',
-    name: 'MEDIA DOWNLOADER',
-    endpoints: [
-      {
-        name: 'CapCut Video',
-        path: '/api/download/capcut',
-        method: 'GET',
-        desc: 'Download template dan video CapCut tanpa ribet.',
-        params: [{ key: 'url', label: 'URL', required: true, default: 'https://www.capcut.com/' }]
-      },
-      {
-        name: 'TikTok Video',
-        path: '/api/download/tiktok',
-        method: 'GET',
-        desc: 'Download video TikTok tanpa watermark secara cepat.',
-        params: [{ key: 'url', label: 'URL', required: true, default: 'https://vt.tiktok.com/' }]
-      },
-      {
-        name: 'Instagram Media',
-        path: '/api/download/instagram',
-        method: 'GET',
-        desc: 'Unduh reels, video, dan postingan Instagram.',
-        params: [{ key: 'url', label: 'URL', required: true, default: 'https://www.instagram.com/p/' }]
-      },
-      {
-        name: 'DramaBox Stream',
-        path: '/api/download/dramabox',
-        method: 'GET',
-        desc: 'Ekstrak video streaming dari DramaBox.',
-        params: [{ key: 'url', label: 'URL', required: true, default: '' }]
-      }
-    ]
-  },
-  {
-    id: 'AI',
-    name: 'ARTIFICIAL INTELLIGENCE',
+    id: 'M01',
+    name: 'AI',
+    path: '/docs/ai',
     endpoints: [
       {
         name: 'AI Duckai',
@@ -54,7 +22,7 @@ const MODULES = [
         name: 'Bible AI',
         path: '/api/ai/bibleai',
         method: 'GET',
-        desc: 'Eksplorasi teologi dan referensi kitab suci.',
+        desc: 'Explore theological and scripture references.',
         params: [
           { key: 'question', label: 'QUESTION', required: true, default: 'What is faith?' },
           { key: 'translation', label: 'TRANSLATION', required: false, default: 'ESV' }
@@ -64,72 +32,183 @@ const MODULES = [
         name: 'Flixier AI Image',
         path: '/api/ai/flixier',
         method: 'GET',
-        desc: 'Render gambar artistik melalui perintah teks.',
-        params: [{ key: 'prompt', label: 'PROMPT', required: true, default: 'cyberpunk neon futuristic city' }]
+        desc: 'Render artwork matrices via text prompt.',
+        params: [{ key: 'prompt', label: 'PROMPT', required: true, default: 'transformer mecha cyber robot' }]
       },
       {
         name: 'AI Lyrics Generator',
         path: '/api/ai/lyricsgen',
         method: 'GET',
-        desc: 'Buat lirik lagu secara otomatis dan kreatif.',
+        desc: 'Generate lyrics and rhythmic poems.',
         params: [{ key: 'title', label: 'TITLE', required: true, default: 'Cyberpunk night' }]
       },
       {
         name: 'AI Chat (ai4chat)',
         path: '/api/ai/ai4chat',
         method: 'GET',
-        desc: 'Asisten obrolan interaktif.',
+        desc: 'Direct conversation AI interface.',
         params: [{ key: 'message', label: 'MESSAGE', required: true, default: 'Hello AI' }]
       }
     ]
   },
   {
-    id: 'TOOLS',
-    name: 'TOOLS & UTILITIES',
+    id: 'M02',
+    name: 'ADMIN',
+    path: '/docs/admin',
+    endpoints: [
+      { name: 'Admin Stats', path: '/api/admin/stats', method: 'GET', desc: 'Get server diagnostic metrics.', params: [] },
+      { name: 'Server Health', path: '/api/admin/health', method: 'GET', desc: 'Check subsystem operational health.', params: [] },
+      { name: 'Clear Logs', path: '/api/admin/logs', method: 'GET', desc: 'Flush active server runtime logs.', params: [] }
+    ]
+  },
+  {
+    id: 'M03',
+    name: 'CACHE',
+    path: '/docs/cache',
+    endpoints: [
+      { name: 'Get Cache', path: '/api/cache/get', method: 'GET', desc: 'Retrieve item from temporary memory store.', params: [{ key: 'key', label: 'KEY', required: true, default: 'test_key' }] },
+      { name: 'Flush Cache', path: '/api/cache/flush', method: 'GET', desc: 'Clear all active memory keys.', params: [] }
+    ]
+  },
+  {
+    id: 'M04',
+    name: 'DOWNLOAD',
+    path: '/docs/download',
     endpoints: [
       {
-        name: 'AI Coder',
-        path: '/api/tools/aicoder',
+        name: 'CapCut Video',
+        path: '/api/download/capcut',
         method: 'GET',
-        desc: 'Penyelesai kode pemrograman dan debugger cerdas.',
-        params: [{ key: 'text', label: 'TEXT', required: true, default: 'binary search tree in python' }]
+        desc: 'Retrieve metadata for a CapCut video.',
+        params: [{ key: 'url', label: 'URL', required: true, default: 'https://www.capcut.com/' }]
       },
       {
-        name: 'Checker Ban WA',
-        path: '/api/tools/checker-ban-wa',
+        name: 'TikTok Video',
+        path: '/api/download/tiktok',
         method: 'GET',
-        desc: 'Periksa status blokir atau aktif nomor WhatsApp.',
-        params: [{ key: 'number', label: 'PHONE NUMBER', required: true, default: '628123456789' }]
+        desc: 'Download media without watermark from TikTok.',
+        params: [{ key: 'url', label: 'URL', required: true, default: 'https://vt.tiktok.com/' }]
       },
       {
-        name: 'Domain Info',
-        path: '/api/tools/domaininfo',
+        name: 'Instagram Media',
+        path: '/api/download/instagram',
         method: 'GET',
-        desc: 'Cek informasi DNS dan rekaman WHOIS domain.',
-        params: [{ key: 'domain', label: 'DOMAIN', required: true, default: 'google.com' }]
+        desc: 'Scrape Instagram video, reel, and image content.',
+        params: [{ key: 'url', label: 'URL', required: true, default: 'https://www.instagram.com/p/' }]
       },
       {
-        name: 'Detik News',
-        path: '/api/news/detik',
+        name: 'DramaBox Video',
+        path: '/api/download/dramabox',
         method: 'GET',
-        desc: 'Berita aktual pilihan dari portal Detik.',
-        params: []
+        desc: 'Extract DramaBox stream details.',
+        params: [{ key: 'url', label: 'URL', required: true, default: '' }]
       }
+    ]
+  },
+  {
+    id: 'M05',
+    name: 'FUN',
+    path: '/docs/fun',
+    endpoints: [
+      { name: 'Random Joke', path: '/api/fun/joke', method: 'GET', desc: 'Retrieve a random tech/general joke.', params: [] },
+      { name: 'Meme Generator', path: '/api/fun/meme', method: 'GET', desc: 'Fetch viral trending meme template.', params: [] },
+      { name: 'Quote of Day', path: '/api/fun/quote', method: 'GET', desc: 'Get daily motivational programming quote.', params: [] }
+    ]
+  },
+  {
+    id: 'M06',
+    name: 'LEADERBOARD',
+    path: '/docs/leaderboard',
+    endpoints: [
+      { name: 'Top Users', path: '/api/leaderboard/top', method: 'GET', desc: 'Fetch top active API consumers ranking.', params: [] }
+    ]
+  },
+  {
+    id: 'M07',
+    name: 'LIBRARY',
+    path: '/docs/library',
+    endpoints: [
+      { name: 'Book Search', path: '/api/library/search', method: 'GET', desc: 'Search open-source programming books.', params: [{ key: 'q', label: 'QUERY', required: true, default: 'javascript' }] },
+      { name: 'Article Feed', path: '/api/library/articles', method: 'GET', desc: 'Get latest tech literature feeds.', params: [] },
+      { name: 'Glossary Lookup', path: '/api/library/glossary', method: 'GET', desc: 'Define tech terms.', params: [{ key: 'term', label: 'TERM', required: true, default: 'API' }] }
+    ]
+  },
+  {
+    id: 'M08',
+    name: 'MAKER',
+    path: '/docs/maker',
+    endpoints: [
+      { name: 'QR Code Generator', path: '/api/maker/qr', method: 'GET', desc: 'Generate custom QR code image payload.', params: [{ key: 'text', label: 'TEXT', required: true, default: 'https://dinn.my.id' }] },
+      { name: 'Badge Generator', path: '/api/maker/badge', method: 'GET', desc: 'Create custom markdown shields badge.', params: [{ key: 'label', label: 'LABEL', required: true, default: 'status' }, { key: 'message', label: 'MESSAGE', required: true, default: 'online' }] }
+    ]
+  },
+  {
+    id: 'M09',
+    name: 'NEWS',
+    path: '/docs/news',
+    endpoints: [
+      { name: 'Detik News', path: '/api/news/detik', method: 'GET', desc: 'Latest breaking headlines from Detikcom.', params: [] },
+      { name: 'Tech Crunch', path: '/api/news/tech', method: 'GET', desc: 'Global technology updates.', params: [] },
+      { name: 'Crypto Bulletin', path: '/api/news/crypto', method: 'GET', desc: 'Real-time cryptocurrency bulletin.', params: [] },
+      { name: 'RSS Stream', path: '/api/news/rss', method: 'GET', desc: 'Custom RSS parser feed.', params: [{ key: 'url', label: 'RSS URL', required: true, default: 'https://rss.cnn.com/rss/edition.rss' }] }
+    ]
+  },
+  {
+    id: 'M10',
+    name: 'RANDOM',
+    path: '/docs/random',
+    endpoints: [
+      { name: 'Random Number', path: '/api/random/number', method: 'GET', desc: 'Generate cryptographic random digit.', params: [{ key: 'max', label: 'MAX', required: false, default: '100' }] },
+      { name: 'Random String', path: '/api/random/string', method: 'GET', desc: 'Generate secure random hash string.', params: [{ key: 'length', label: 'LENGTH', required: false, default: '16' }] }
+    ]
+  },
+  {
+    id: 'M11',
+    name: 'SEARCH',
+    path: '/docs/search',
+    endpoints: [
+      { name: 'Web Search', path: '/api/search/web', method: 'GET', desc: 'Query open web indices.', params: [{ key: 'query', label: 'QUERY', required: true, default: 'latest AI trends' }] },
+      { name: 'Image Search', path: '/api/search/image', method: 'GET', desc: 'Find public domain pictures.', params: [{ key: 'q', label: 'KEYWORD', required: true, default: 'cyberpunk city' }] }
+    ]
+  },
+  {
+    id: 'M12',
+    name: 'STALK',
+    path: '/docs/stalk',
+    endpoints: [
+      { name: 'GitHub Stalker', path: '/api/stalk/github', method: 'GET', desc: 'Retrieve public GitHub user telemetry.', params: [{ key: 'username', label: 'USERNAME', required: true, default: 'torvalds' }] },
+      { name: 'NPM Stalker', path: '/api/stalk/npm', method: 'GET', desc: 'Inspect NPM package registry stats.', params: [{ key: 'package', label: 'PACKAGE', required: true, default: 'react' }] }
+    ]
+  },
+  {
+    id: 'M13',
+    name: 'TOOLS',
+    path: '/docs/tools',
+    endpoints: [
+      { name: 'AI Coder', path: '/api/tools/aicoder', method: 'GET', desc: 'Algorithm code solver and debugger.', params: [{ key: 'text', label: 'TEXT', required: true, default: 'binary search tree in python' }] },
+      { name: 'Checker Ban WA', path: '/api/tools/checker-ban-wa', method: 'GET', desc: 'Verify if a WhatsApp number is banned or active.', params: [{ key: 'number', label: 'PHONE NUMBER', required: true, default: '628123456789' }] },
+      { name: 'Domain Info', path: '/api/tools/domaininfo', method: 'GET', desc: 'WHOIS and DNS domain records inquiry.', params: [{ key: 'domain', label: 'DOMAIN', required: true, default: 'google.com' }] }
     ]
   }
 ];
 
 export default function App() {
   const [filter, setFilter] = useState('');
-  const [activeEp, setActiveEp] = useState('/api/download/capcut');
-  const [inputs, setInputs] = useState({
-    '/api/download/capcut': { url: 'https://www.capcut.com/' }
-  });
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [openModules, setOpenModules] = useState({ M01: true }); // Default AI terbuka
+  const [activeEp, setActiveEp] = useState(null);
+  const [inputs, setInputs] = useState({});
   const [runs, setRuns] = useState({});
   const [activeTab, setActiveTab] = useState('PREVIEW');
   const [copiedPath, setCopiedPath] = useState(null);
 
-  const toggle = (ep) => {
+  const totalEndpoints = MODULES.reduce((acc, m) => acc + m.endpoints.length, 0);
+
+  const toggleModule = (id) => {
+    setOpenModules((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const toggleEndpoint = (ep) => {
     if (activeEp === ep.path) {
       setActiveEp(null);
     } else {
@@ -179,9 +258,7 @@ export default function App() {
           status: res.status,
           latency: Math.round(end - start),
           url: targetUrl,
-          headers: {
-            'content-type': res.headers.get('content-type') || 'application/json'
-          },
+          headers: { 'content-type': res.headers.get('content-type') || 'application/json' },
           data
         }
       }));
@@ -210,228 +287,288 @@ export default function App() {
 
   return (
     <div className="app-shell">
+      {/* Sidebar Navigation Drawer */}
+      {sidebarOpen && <div className="sidebar-backdrop" onClick={() => setSidebarOpen(false)}></div>}
+      <aside className={`sidebar-drawer ${sidebarOpen ? 'open' : ''}`}>
+        <div className="sidebar-head">
+          <div className="sidebar-title-group">
+            <span className="sidebar-nav-lbl">NAVIGATION</span>
+            <span className="sidebar-brand-lbl">DINSTORE API</span>
+          </div>
+          <button className="sidebar-close-btn" onClick={() => setSidebarOpen(false)}>✕</button>
+        </div>
+
+        <div className="sidebar-menu-list">
+          <div className="sidebar-item active">
+            <span className="s-icon">🏠</span>
+            <span className="s-name">HOME</span>
+            <span className="s-num">00</span>
+          </div>
+          {MODULES.map((m, idx) => (
+            <div
+              key={m.id}
+              className="sidebar-item"
+              onClick={() => {
+                setOpenModules((prev) => ({ ...prev, [m.id]: true }));
+                setSidebarOpen(false);
+              }}
+            >
+              <span className="s-icon">
+                {idx === 0 ? '✦' : idx === 1 ? '◆' : idx === 2 ? '▣' : idx === 3 ? '⬇' : idx === 4 ? '🎮' : idx === 5 ? '🏆' : idx === 6 ? '📚' : idx === 7 ? '🎨' : idx === 8 ? '📰' : idx === 9 ? '❖' : idx === 10 ? '🔍' : idx === 11 ? '◉' : '⌘'}
+              </span>
+              <span className="s-name">{m.name}</span>
+              <span className="s-num">{String(idx + 1).padStart(2, '0')}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="sidebar-footer">
+          <span className="sys-status-label">SYSTEM STATUS</span>
+          <span className="sys-status-val">● OPERATIONAL</span>
+        </div>
+      </aside>
+
       <div className="main-viewport">
-        {/* Navbar ala Sidownload */}
+        {/* Navbar Atas */}
         <header className="header-bar">
-          <div className="brand-group">
-            <div className="brand-logo-box">S</div>
+          <div className="brand-left">
+            <button className="menu-burger-btn" onClick={() => setSidebarOpen(true)}>
+              ☰
+            </button>
+            <div className="avatar-d">D</div>
             <div className="brand-texts">
-              <span className="brand-title">SIDOWNLOAD</span>
-              <span className="brand-subtitle">FAST • SIMPLE • FREE</span>
+              <span className="brand-title">DINSTORE</span>
+              <span className="brand-subtitle">API SYSTEM</span>
             </div>
           </div>
-          <a href="#endpoints-section" className="doc-btn">
-            DOC ↗
-          </a>
+          <div className="online-pill">
+            <span className="live-spark"></span> ONLINE
+          </div>
         </header>
 
-        {/* Hero Section ala Gambar */}
-        <section className="hero-section">
-          <div className="hero-badge">
-            <span className="live-spark"></span> MEDIA DOWNLOADER
+        {/* Hero Section Banner */}
+        <section className="hero-terminal-box">
+          <div className="terminal-badge">
+            <span className="live-spark"></span> TERMINAL ACTIVE
           </div>
-          <h1 className="hero-headline">
-            Download Video <br />
-            & Audio <span className="highlight-green">Tanpa Ribet</span>
+          <h1 className="hero-main-title">
+            DINSTORE <span className="version-pill">3.0.0</span>
           </h1>
-          <p className="hero-desc">
-            Download media favorit kamu dengan cepat, sederhana, dan gratis.
+          <p className="hero-subtext">
+            A comprehensive and user friendly API solution for modern applications.
           </p>
 
-          {/* Floating Icon Badges Preview */}
-          <div className="hero-preview-cluster">
-            <div className="preview-bubble tiktok">🎵</div>
-            <div className="preview-phone-mockup">
-              <div className="mockup-top">SIDOWNLOAD</div>
-              <div className="mockup-play-btn">▶</div>
+          <div className="stats-metric-grid">
+            <div className="stat-card-box">
+              <span className="stat-label-box">CATEGORIES</span>
+              <span className="stat-val-box">{MODULES.length}</span>
             </div>
-            <div className="preview-bubble ig">📸</div>
-            <div className="preview-bubble spot">🟢</div>
+            <div className="stat-card-box">
+              <span className="stat-label-box">ENDPOINTS</span>
+              <span className="stat-val-box">{totalEndpoints}</span>
+            </div>
+            <div className="stat-card-box">
+              <span className="stat-label-box">STATUS</span>
+              <span className="stat-val-box green">ONLINE</span>
+            </div>
           </div>
         </section>
 
-        {/* Filter / Search Endpoint */}
-        <div id="endpoints-section" className="filter-block">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#71717a" strokeWidth="2.5">
+        {/* Search Bar Filter */}
+        <div className="filter-block">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#71717a" strokeWidth="2.5">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
           <input
             type="text"
-            placeholder="CARI ENDPOINT API..."
+            placeholder="SEARCH ENDPOINT / CATEGORY..."
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
           />
         </div>
 
-        {/* Endpoint Modules */}
+        {/* Daftar Modul (Module 01 - Module 13) */}
         <div className="modules-stack">
-          {MODULES.map((mod) => {
-            const filteredEps = mod.endpoints.filter((e) =>
-              e.name.toLowerCase().includes(filter.toLowerCase()) ||
-              e.path.toLowerCase().includes(filter.toLowerCase())
+          {MODULES.map((mod, idx) => {
+            const isOpenMod = !!openModules[mod.id];
+            const filteredEps = mod.endpoints.filter(
+              (e) =>
+                e.name.toLowerCase().includes(filter.toLowerCase()) ||
+                e.path.toLowerCase().includes(filter.toLowerCase())
             );
 
             if (filter && filteredEps.length === 0) return null;
 
             return (
-              <div key={mod.id} className="module-group">
-                <div className="module-label">
-                  <span>{mod.name}</span>
-                  <span className="module-counter">{filteredEps.length} ENDPOINTS</span>
+              <div key={mod.id} className="module-group-card">
+                <div className="module-card-head" onClick={() => toggleModule(mod.id)}>
+                  <div className="mod-head-left">
+                    <div className="mod-icon-badge">
+                      {idx === 0 ? '✦' : idx === 1 ? '◆' : idx === 2 ? '▣' : idx === 3 ? '⬇' : idx === 4 ? '🎮' : idx === 5 ? '🏆' : idx === 6 ? '📚' : idx === 7 ? '🎨' : idx === 8 ? '📰' : idx === 9 ? '❖' : idx === 10 ? '🔍' : idx === 11 ? '◉' : '⌘'}
+                    </div>
+                    <div>
+                      <span className="mod-num-label">MODULE {String(idx + 1).padStart(2, '0')}</span>
+                      <div className="mod-name-label">{mod.name}</div>
+                      <span className="mod-ep-count">{mod.endpoints.length} ENDPOINTS</span>
+                    </div>
+                  </div>
+                  <div className="mod-head-right">
+                    <span className="path-text-dim">PATH {mod.path}</span>
+                    <span className="open-close-txt">{isOpenMod ? 'CLOSE ↑' : 'OPEN →'}</span>
+                  </div>
                 </div>
 
-                <div className="endpoints-flow">
-                  {filteredEps.map((ep) => {
-                    const isOpen = activeEp === ep.path;
-                    const r = runs[ep.path] || {};
-                    const curVals = inputs[ep.path] || {};
+                {/* Daftar Endpoints di dalam Modul */}
+                {isOpenMod && (
+                  <div className="endpoints-drawer-list">
+                    {filteredEps.map((ep) => {
+                      const isEpOpen = activeEp === ep.path;
+                      const r = runs[ep.path] || {};
+                      const curVals = inputs[ep.path] || {};
 
-                    return (
-                      <div key={ep.path} className={`ep-card ${isOpen ? 'expanded' : ''}`}>
-                        <div className="ep-card-head" onClick={() => toggle(ep)}>
-                          <div className="ep-info">
-                            <span className="get-tag">{ep.method}</span>
-                            <span className="ep-path-txt">{ep.path}</span>
-                            <span className="ep-alias-txt">{ep.name}</span>
-                          </div>
-                          <span className="arrow-sym">{isOpen ? '˄' : '˅'}</span>
-                        </div>
-
-                        {isOpen && (
-                          <div className="ep-body">
-                            <p className="ep-desc-txt">{ep.desc}</p>
-
-                            <div className="method-toggles">
-                              <span className="m-pill active">GET</span>
-                              <span className="m-pill muted">POST</span>
+                      return (
+                        <div key={ep.path} className={`ep-mini-card ${isEpOpen ? 'active' : ''}`}>
+                          <div className="ep-mini-head" onClick={() => toggleEndpoint(ep)}>
+                            <div className="ep-mini-info">
+                              <span className="get-badge-green">{ep.method}</span>
+                              <span className="ep-name-title">{ep.name}</span>
+                              <span className="ep-route-sub">{ep.path}</span>
                             </div>
+                            <span className="ep-plus-sign">{isEpOpen ? '−' : '+'}</span>
+                          </div>
 
-                            {ep.params.length > 0 && (
-                              <div className="params-area">
-                                <span className="params-header-txt">REQUEST PARAMETERS</span>
-                                {ep.params.map((p) => (
-                                  <div key={p.key} className="form-item">
-                                    <label>
-                                      {p.label} {p.required && <span className="req-point">*</span>}
-                                    </label>
-                                    {p.key === 'model' ? (
-                                      <select
-                                        value={curVals[p.key] ?? p.default}
-                                        onChange={(e) => setParam(ep.path, p.key, e.target.value)}
+                          {isEpOpen && (
+                            <div className="ep-playground-box">
+                              <p className="ep-desc-txt">{ep.desc}</p>
+
+                              {ep.params.length > 0 && (
+                                <div className="params-area">
+                                  <span className="params-header-txt">REQUEST PARAMETERS</span>
+                                  {ep.params.map((p) => (
+                                    <div key={p.key} className="form-item">
+                                      <label>
+                                        {p.label} {p.required && <span className="req-point">*</span>}
+                                      </label>
+                                      {p.key === 'model' ? (
+                                        <select
+                                          value={curVals[p.key] ?? p.default}
+                                          onChange={(e) => setParam(ep.path, p.key, e.target.value)}
+                                        >
+                                          <option value="gpt-4o-mini">gpt-4o-mini</option>
+                                          <option value="claude-3-5-haiku-latest">claude-3-5-haiku-latest</option>
+                                          <option value="meta-llama/Llama-4-Scout-17B-16E-Instruct">meta-llama/Llama-4-Scout-17B-16E-Instruct</option>
+                                          <option value="mistralai/Mistral-Small-24B-Instruct-2501">mistralai/Mistral-Small-24B-Instruct-2501</option>
+                                          <option value="openai/gpt-oss-120b">openai/gpt-oss-120b</option>
+                                          <option value="gpt-5-mini">gpt-5-mini</option>
+                                        </select>
+                                      ) : p.key === 'translation' ? (
+                                        <select
+                                          value={curVals[p.key] ?? p.default}
+                                          onChange={(e) => setParam(ep.path, p.key, e.target.value)}
+                                        >
+                                          <option value="ESV">ESV</option>
+                                          <option value="NIV">NIV</option>
+                                          <option value="KJV">KJV</option>
+                                          <option value="TB">TB</option>
+                                        </select>
+                                      ) : (
+                                        <input
+                                          type="text"
+                                          value={curVals[p.key] ?? ''}
+                                          placeholder={p.default}
+                                          onChange={(e) => setParam(ep.path, p.key, e.target.value)}
+                                        />
+                                      )}
+                                    </div>
+                                  ))}
+                                </div>
+                              )}
+
+                              <button
+                                type="button"
+                                className="btn-exec"
+                                disabled={r.loading}
+                                execute={() => execute(ep)}
+                                onClick={() => execute(ep)}
+                              >
+                                {r.loading ? 'COMPUTING STREAM...' : 'EXECUTE REQUEST'}
+                              </button>
+
+                              {/* Response Box JSON */}
+                              {r.data && (
+                                <div className="response-box">
+                                  <div className="response-box-head">
+                                    <div className="tabs-cluster">
+                                      <button
+                                        className={`tab-btn ${activeTab === 'PREVIEW' ? 'active' : ''}`}
+                                        onClick={() => setActiveTab('PREVIEW')}
                                       >
-                                        <option value="gpt-4o-mini">gpt-4o-mini</option>
-                                        <option value="claude-3-5-haiku-latest">claude-3-5-haiku-latest</option>
-                                        <option value="meta-llama/Llama-4-Scout-17B-16E-Instruct">meta-llama/Llama-4-Scout-17B-16E-Instruct</option>
-                                        <option value="mistralai/Mistral-Small-24B-Instruct-2501">mistralai/Mistral-Small-24B-Instruct-2501</option>
-                                        <option value="openai/gpt-oss-120b">openai/gpt-oss-120b</option>
-                                        <option value="gpt-5-mini">gpt-5-mini</option>
-                                      </select>
-                                    ) : p.key === 'translation' ? (
-                                      <select
-                                        value={curVals[p.key] ?? p.default}
-                                        onChange={(e) => setParam(ep.path, p.key, e.target.value)}
+                                        PREVIEW
+                                      </button>
+                                      <button
+                                        className={`tab-btn ${activeTab === 'HEADERS' ? 'active' : ''}`}
+                                        onClick={() => setActiveTab('HEADERS')}
                                       >
-                                        <option value="ESV">ESV</option>
-                                        <option value="NIV">NIV</option>
-                                        <option value="KJV">KJV</option>
-                                        <option value="TB">TB</option>
-                                      </select>
-                                    ) : (
-                                      <input
-                                        type="text"
-                                        value={curVals[p.key] ?? ''}
-                                        placeholder={p.default}
-                                        onChange={(e) => setParam(ep.path, p.key, e.target.value)}
-                                      />
+                                        HEADERS
+                                      </button>
+                                      <button
+                                        className={`tab-btn ${activeTab === 'CURL' ? 'active' : ''}`}
+                                        onClick={() => setActiveTab('CURL')}
+                                      >
+                                        CURL
+                                      </button>
+                                    </div>
+
+                                    <div className="head-right-actions">
+                                      <button
+                                        className="copy-trigger"
+                                        title="Copy JSON Response"
+                                        onClick={() => copyJson(ep.path, r.data)}
+                                      >
+                                        {copiedPath === ep.path ? (
+                                          <span className="copied-flag">✓</span>
+                                        ) : (
+                                          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                                            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                          </svg>
+                                        )}
+                                      </button>
+
+                                      <span className={`status-tag ${r.status === 200 ? 'ok' : 'err'}`}>
+                                        {r.status} {r.status === 200 ? 'OK' : 'ERR'}
+                                      </span>
+                                      {r.latency && <span className="latency-lbl">{r.latency}ms</span>}
+                                    </div>
+                                  </div>
+
+                                  <div className="response-box-body">
+                                    {activeTab === 'PREVIEW' && (
+                                      <pre className="code-green">
+                                        {JSON.stringify(r.data, null, 2)}
+                                      </pre>
+                                    )}
+                                    {activeTab === 'HEADERS' && (
+                                      <pre className="code-cyan">
+                                        {JSON.stringify(r.headers, null, 2)}
+                                      </pre>
+                                    )}
+                                    {activeTab === 'CURL' && (
+                                      <pre className="code-yellow">
+                                        {`curl -X GET "${window.location.origin}${r.url}"`}
+                                      </pre>
                                     )}
                                   </div>
-                                ))}
-                              </div>
-                            )}
-
-                            <button
-                              type="button"
-                              className="btn-exec"
-                              disabled={r.loading}
-                              onClick={() => execute(ep)}
-                            >
-                              {r.loading ? 'PROSES DOWNLOAD...' : 'EXECUTE REQUEST'}
-                            </button>
-
-                            {/* Response Box Tepat di Bawah Endpoint */}
-                            {r.data && (
-                              <div className="response-box">
-                                <div className="response-box-head">
-                                  <div className="tabs-cluster">
-                                    <button
-                                      className={`tab-btn ${activeTab === 'PREVIEW' ? 'active' : ''}`}
-                                      onClick={() => setActiveTab('PREVIEW')}
-                                    >
-                                      PREVIEW
-                                    </button>
-                                    <button
-                                      className={`tab-btn ${activeTab === 'HEADERS' ? 'active' : ''}`}
-                                      onClick={() => setActiveTab('HEADERS')}
-                                    >
-                                      HEADERS
-                                    </button>
-                                    <button
-                                      className={`tab-btn ${activeTab === 'CURL' ? 'active' : ''}`}
-                                      onClick={() => setActiveTab('CURL')}
-                                    >
-                                      CURL
-                                    </button>
-                                  </div>
-
-                                  <div className="head-right-actions">
-                                    <button
-                                      className="copy-trigger"
-                                      title="Copy JSON Response"
-                                      onClick={() => copyJson(ep.path, r.data)}
-                                    >
-                                      {copiedPath === ep.path ? (
-                                        <span className="copied-flag">✓</span>
-                                      ) : (
-                                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                                        </svg>
-                                      )}
-                                    </button>
-
-                                    <span className={`status-tag ${r.status === 200 ? 'ok' : 'err'}`}>
-                                      {r.status} {r.status === 200 ? 'OK' : 'ERR'}
-                                    </span>
-                                    {r.latency && <span className="latency-lbl">{r.latency}ms</span>}
-                                  </div>
                                 </div>
-
-                                <div className="response-box-body">
-                                  {activeTab === 'PREVIEW' && (
-                                    <pre className="code-green">
-                                      {JSON.stringify(r.data, null, 2)}
-                                    </pre>
-                                  )}
-                                  {activeTab === 'HEADERS' && (
-                                    <pre className="code-cyan">
-                                      {JSON.stringify(r.headers, null, 2)}
-                                    </pre>
-                                  )}
-                                  {activeTab === 'CURL' && (
-                                    <pre className="code-yellow">
-                                      {`curl -X GET "${window.location.origin}${r.url}"`}
-                                    </pre>
-                                  )}
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                </div>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             );
           })}
