@@ -4,7 +4,7 @@
   /* Sidownload Dinn Signature Theme Palette */
   --dinn-bg: #090d10;
   --dinn-canvas: #06090c;
-  --dinn-panel: rgba(13, 19, 24, 0.92);
+  --dinn-panel: #0d1318;
   --dinn-drawer: #0a0f14;
   --dinn-input: #0f171d;
   --dinn-terminal: #040709;
@@ -44,37 +44,23 @@ body {
   color: var(--text-pure);
   font-family: 'Inter', -apple-system, sans-serif;
   min-height: 100vh;
-  overflow-x: hidden;
-}
-
-/* Background Canvas Partikel Kotak */
-.cube-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1;
-  pointer-events: none;
+  display: flex;
+  justify-content: center;
 }
 
 .app-shell {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  justify-content: center;
+  width: 100%;
+  max-width: 480px;
+  background-color: var(--dinn-canvas);
+  border-left: 1px solid var(--dinn-border);
+  border-right: 1px solid var(--dinn-border);
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .main-viewport {
   width: 100%;
-  max-width: 480px;
-  background-color: rgba(9, 13, 16, 0.88);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-left: 1px solid var(--dinn-border);
-  border-right: 1px solid var(--dinn-border);
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
   padding-bottom: 40px;
