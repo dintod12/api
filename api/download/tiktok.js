@@ -1,4 +1,11 @@
 export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   if (req.method !== "GET") {
     return res.status(405).json({
       creator: "DINSTORE",
@@ -20,18 +27,13 @@ export default async function handler(req, res) {
   }
 
   try {
-    const target = new URL(
-      "https://api.azbry.com/api/download/tiktok"
-    );
-
+    const target = new URL("https://api.azbry.com/api/download/tiktok");
     target.searchParams.set("url", url);
 
     const response = await fetch(target.toString());
-
     const text = await response.text();
 
     let data;
-
     try {
       data = JSON.parse(text);
     } catch {
@@ -40,10 +42,12 @@ export default async function handler(req, res) {
       };
     }
 
+    const isSuccess = response.ok && (data.status === true || data.status === "true");
+
     return res.status(response.status).json({
       creator: "DINSTORE",
       source: "TikTok — DINSTORE",
-      status: response.ok && data.status !== false,
+      status: isSuccess,
       result: data.result ?? data
     });
 
