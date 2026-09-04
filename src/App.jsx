@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-// Daftar 13 Modul lengkap sesuai referensi tangkapan layar
+// Daftar 13 Modul lengkap
 const MODULES = [
   {
     id: 'M01',
@@ -195,7 +195,8 @@ const MODULES = [
 export default function App() {
   const [filter, setFilter] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [openModules, setOpenModules] = useState({ M01: true }); // Default AI terbuka
+  // Diubah menjadi objek kosong agar semuanya tertutup secara default
+  const [openModules, setOpenModules] = useState({});
   const [activeEp, setActiveEp] = useState(null);
   const [inputs, setInputs] = useState({});
   const [runs, setRuns] = useState({});
@@ -388,7 +389,7 @@ export default function App() {
           />
         </div>
 
-        {/* Daftar Modul (Module 01 - Module 13) */}
+        {/* Daftar Modul */}
         <div className="modules-stack">
           {MODULES.map((mod, idx) => {
             const isOpenMod = !!openModules[mod.id];
@@ -489,7 +490,6 @@ export default function App() {
                                 type="button"
                                 className="btn-exec"
                                 disabled={r.loading}
-                                execute={() => execute(ep)}
                                 onClick={() => execute(ep)}
                               >
                                 {r.loading ? 'COMPUTING STREAM...' : 'EXECUTE REQUEST'}
